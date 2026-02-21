@@ -133,6 +133,16 @@ margin-top:0;
 color:#d90000;
 }
 
+.countdown{
+animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:1;}
+50%{opacity:0.6;}
+100%{opacity:1;}
+}
+
 </style>
 </head>
 
@@ -381,13 +391,13 @@ document.getElementById("countdown").innerHTML = "🔥 本日開催！";
 return;
 }
 
-// 日・時間だけ計算（分秒は切り捨て）
-const totalHours = Math.floor(diff / 3600000);
-const days = Math.floor(totalHours / 24);
-const hours = totalHours % 24;
+const days = Math.floor(diff / 86400000);
+const hours = Math.floor((diff % 86400000) / 3600000);
+const minutes = Math.floor((diff % 3600000) / 60000);
+const seconds = Math.floor((diff % 60000) / 1000);
 
 document.getElementById("countdown").innerHTML =
-`⏳ あと ${days}日 ${hours}時間 で開催！`;
+`⏳ あと ${days}日 ${hours}時間 ${minutes}分 ${seconds}秒 で開催！`;
 
 },1000);
 }
@@ -397,4 +407,5 @@ loadTodayContent();
 
 </body>
 </html>
+
 
