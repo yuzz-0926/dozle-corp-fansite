@@ -384,12 +384,13 @@ location.reload();
   
 function renderMyEvents(){
 if(!myEvents.length){
-myEventsDiv.innerHTML=
-"<p>
+myEventsDiv.innerHTML = `
+<p>
 まだ参加予定はありません。<br>
 イベントタブから追加できます。<br>
 詳細は上部タブの「Guide」をご覧ください。
-</p>";
+</p>
+`;
 return;
 }
 myEventsDiv.innerHTML=myEvents.map(e=>`<div class="card">${e}</div>`).join("");
@@ -515,6 +516,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
