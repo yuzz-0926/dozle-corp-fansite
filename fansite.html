@@ -481,7 +481,7 @@ document.getElementById("plannedFeatures").innerHTML +=
 `<div class="feature-card">
 <h3>${item.title}</h3>
 <p><strong style="color:${statusColor};">${item.status}</strong></p>
-<p>${item.note || ""}</p>
+${item.note ? `<p>${item.note}</p>` : ""}
 </div>`;
 });
 });
@@ -516,6 +516,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
