@@ -206,7 +206,7 @@ color:#d90000;
 <h2 style="margin-top:40px;">主な機能</h2>
 
 <div class="feature-card">
-<h3>🔍 今日のドズル社（ホームタブ）</h3>
+<h3>🔍 ランダムドズル社データ（ホームタブ）</h3>
 <p>おすすめの動画または用語をランダムで1件表示します。</p>
 <p>ページを訪れるたびに変わります。</p>
 </div>
@@ -351,7 +351,7 @@ const data=parseCSV(text);
 if(!data.length)return;
 const random=data[Math.floor(Math.random()*data.length)];
 todayBox.innerHTML=
-`<h3>🌟 今日のドズル社【動画】</h3>
+`<h3>🌟 ランダムドズル社データ【動画】</h3>
 <p><strong>${random.title}</strong></p>
 <p><a href="${random.url}" target="_blank">▶ 動画を見る</a></p>`;
 });
@@ -361,7 +361,7 @@ const data=parseCSV(text);
 if(!data.length)return;
 const random=data[Math.floor(Math.random()*data.length)];
 todayBox.innerHTML=
-`<h3>🌟 今日のドズル社【用語】</h3>
+`<h3>🌟 ランダムドズル社データ【用語】</h3>
 <p><strong>${random.word}</strong></p>
 <p>${random.description}</p>`;
 });
@@ -508,6 +508,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
