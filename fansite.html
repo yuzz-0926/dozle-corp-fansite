@@ -119,8 +119,10 @@ document.getElementById(id).classList.add('active');
 
 const eventsURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=0&single=true&output=csv";
 const goodsURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=1794976478&single=true&output=csv";
+const videosURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=594878538&single=true&output=csv";
+const wordsURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=1791332374&single=true&output=csv";
 
-// 安全なCSVパーサー
+// CSVパース
 function parseCSV(text){
 const rows = text.trim().split("\n");
 const headers = rows.shift().split(",");
@@ -133,17 +135,88 @@ return obj;
 });
 }
 
+// ======================
+// 🌟 今日のドズル社
+// ======================
+
+function loadTodayContent(){
+const category = Math.random() < 0.5 ? "video" : "word";
+
+if(category === "video"){
+fetch(videosURL)
+.then(res=>res.text())
+.then(text=>{
+const data = parseCSV(text);
+if(data.length === 0) return;
+const random = data[Math.floor(Math.random()*data.length)];
+
+document.getElementById("todayBox").innerHTML = `
+<h3>🌟 今日のドズル社【動画】</h3>
+<p><strong>${random.title}</strong></p>
+<p><a href="${random.url}" target="_blank">▶ 動画を見る</a></p>
+`;
+});
+}else{
+fetch(wordsURL)
+.then(res=>res.text())
+.then(text=>{
+const data = parseCSV(text);
+if(data.length === 0) return;
+const random = data[Math.floor(Math.random()*data.length)];
+
+document.getElementById("todayBox").innerHTML = `
+<h3>🌟 今日のドズル社【用語】</h3>
+<p><strong>${random.word}</strong></p>
+<p>${random.description}</p>
+`;
+});
+}
+}
+
+// ======================
+// 📅 イベント + 参加予定
+// ======================
+
+let myEvents = JSON.parse(localStorage.getItem("myEvents") || "[]");
+
+function saveMyEvents(){
+localStorage.setItem("myEvents", JSON.stringify(myEvents));
+renderMyEvents();
+}
+
+function toggleEvent(title){
+if(myEvents.includes(title)){
+myEvents = myEvents.filter(e=>e!==title);
+}else{
+myEvents.push(title);
+}
+saveMyEvents();
+}
+
+function renderMyEvents(){
+const box = document.getElementById("myEvents");
+if(!box) return;
+if(myEvents.length===0){
+box.innerHTML = "<p>まだ参加予定はありません。</p>";
+return;
+}
+box.innerHTML = myEvents.map(e=>`<div class="card">${e}</div>`).join("");
+}
+
 // イベント取得
 fetch(eventsURL)
 .then(res=>res.text())
 .then(text=>{
 const data = parseCSV(text);
 
-let nearestEvent = null;
-let nearestTime = Infinity;
+let nearestEvent=null;
+let nearestTime=Infinity;
 
 data.forEach(event=>{
 const eventTime = new Date(event.date).getTime();
+
+const isJoined = myEvents.includes(event.title);
+const btnText = isJoined ? "参加予定✔" : "参加予定にする";
 
 const card = `
 <div class="card">
@@ -151,7 +224,9 @@ const card = `
 <p>📅 ${event.date}</p>
 <p>📍 ${event.location}</p>
 <p>${event.note}</p>
+<button onclick="toggleEvent('${event.title}')">${btnText}</button>
 </div>`;
+
 document.getElementById("eventList").innerHTML += card;
 
 if(eventTime > Date.now() && eventTime < nearestTime){
@@ -169,14 +244,18 @@ document.getElementById("latestEvent").innerHTML = `
 `;
 startCountdown(nearestTime);
 }
+
+renderMyEvents();
 });
 
-// グッズ取得
+// ======================
+// 🛍 グッズ
+// ======================
+
 fetch(goodsURL)
 .then(res=>res.text())
 .then(text=>{
 const data = parseCSV(text);
-
 data.forEach(item=>{
 const card = `
 <div class="card">
@@ -188,27 +267,34 @@ document.getElementById("goodsList").innerHTML += card;
 });
 });
 
-// カウントダウン
+<div id="todayBox" class="card"></div>
+<h3>🎟 あなたの参加予定イベント</h3>
+<div id="myEvents"></div>
+
+// ======================
+// ⏳ カウントダウン
+// ======================
+
 function startCountdown(time){
 setInterval(()=>{
-const now = Date.now();
-const diff = time - now;
-
-if(diff <= 0){
-document.getElementById("countdown").innerHTML = "🎉 本日開催！ 🎉";
+const diff = time - Date.now();
+if(diff<=0){
+document.getElementById("countdown").innerHTML="🎉 本日開催！";
 return;
 }
-
-const d = Math.floor(diff/(1000*60*60*24));
-const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-const m = Math.floor((diff%(1000*60*60))/(1000*60));
-const s = Math.floor((diff%(1000*60))/1000);
-
-document.getElementById("countdown").innerHTML =
+const d=Math.floor(diff/86400000);
+const h=Math.floor((diff%86400000)/3600000);
+const m=Math.floor((diff%3600000)/60000);
+const s=Math.floor((diff%60000)/1000);
+document.getElementById("countdown").innerHTML=
 `開催まで ${d}日 ${h}時間 ${m}分 ${s}秒`;
 },1000);
 }
+
+// 起動
+loadTodayContent();
 </script>
+
 <footer style="background:#ffcc00; padding:20px; text-align:center; font-size:14px; margin-top:40px;">
 <p>
 こちらのサイトは非公式ファンサイトです。<br>
@@ -224,3 +310,4 @@ document.getElementById("countdown").innerHTML =
 </body>
 
 </html>
+
