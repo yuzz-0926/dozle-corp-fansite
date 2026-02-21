@@ -18,12 +18,9 @@ header{
 position:fixed;
 top:0;
 width:100%;
-background:#111;
+background:#d90000; /* 赤に変更 */
 color:white;
-padding:15px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+padding:15px 20px 5px 20px;
 z-index:1000;
 }
 
@@ -46,7 +43,7 @@ color:#ff3b3b;
 }
 
 main{
-margin-top:80px;
+margin-top:110px;
 padding:20px;
 }
 
@@ -95,6 +92,25 @@ font-size:13px;
 text-align:center;
 margin-top:40px;
 }
+
+.topnav{
+margin-top:10px;
+text-align:center;
+}
+
+.topnav button{
+background:none;
+border:none;
+color:white;
+margin:0 10px;
+cursor:pointer;
+font-size:14px;
+font-weight:bold;
+}
+
+.topnav button:hover{
+text-decoration:underline;
+}
 </style>
 </head>
 
@@ -102,14 +118,14 @@ margin-top:40px;
 
 <header>
 <div class="title">【非公式】ドズル社データベース</div>
-<nav>
+
+<nav class="topnav">
 <button onclick="showSection('home')">ホーム</button>
 <button onclick="showSection('event')">イベント</button>
 <button onclick="showSection('goods')">グッズ</button>
 <button onclick="showSection('member')">メンバー</button>
 </nav>
 </header>
-
 <main>
 
 <div id="home" class="section active">
@@ -307,3 +323,4 @@ loadTodayContent();
 
 </body>
 </html>
+
