@@ -221,6 +221,9 @@ color:#d90000;
 <p>グッズ情報をピックアップして表示します。</p>
 </div>
 
+<h2 style="margin-top:40px;">🛠 現在検討中の機能</h2>
+<div id="plannedFeatures"></div>
+  
 <h2 style="margin-top:40px;">⚠ 注意事項</h2>
 
 <div class="guide-box">
@@ -312,6 +315,7 @@ const eventsURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOl
 const goodsURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=1794976478&single=true&output=csv";
 const videosURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=594878538&single=true&output=csv";
 const wordsURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=1791332374&single=true&output=csv";
+const plannedURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=1152267879&single=true&output=csv";
 
 function parseCSV(text){
 const rows=text.trim().split("\n");
@@ -438,6 +442,33 @@ goodsList.innerHTML+=
 });
 });
 
+fetch(plannedURL).then(r=>r.text()).then(text=>{
+const data=parseCSV(text);
+
+if(!data.length){
+document.getElementById("plannedFeatures").innerHTML =
+"<p>現在検討中の機能はありません。</p>";
+return;
+}
+
+data.forEach(item=>{
+
+let statusColor="#999";
+
+if(item.status==="検討中") statusColor="#d90000";
+if(item.status==="開発中") statusColor="#ff6600";
+if(item.status==="アイデア") statusColor="#555";
+if(item.status==="実装済") statusColor="#008800";
+
+document.getElementById("plannedFeatures").innerHTML +=
+`<div class="feature-card">
+<h3>${item.title}</h3>
+<p><strong style="color:${statusColor};">${item.status}</strong></p>
+<p>${item.note}</p>
+</div>`;
+});
+});
+  
 function startCountdown(eventDateStr){
 
 // 日本時間の0:00に設定
@@ -468,6 +499,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
