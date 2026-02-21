@@ -366,11 +366,6 @@ myEvents.push(title);
 localStorage.setItem("myEvents",JSON.stringify(myEvents));
 location.reload();
 }
-
-function showSection(id){
-document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-}
   
 function renderMyEvents(){
 if(!myEvents.length){
@@ -473,6 +468,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
