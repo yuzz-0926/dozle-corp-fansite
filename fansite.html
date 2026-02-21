@@ -367,6 +367,11 @@ localStorage.setItem("myEvents",JSON.stringify(myEvents));
 location.reload();
 }
 
+function showSection(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+  
 function renderMyEvents(){
 if(!myEvents.length){
 myEventsDiv.innerHTML="<p>まだ参加予定はありません。</p>";
@@ -468,6 +473,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
