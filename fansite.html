@@ -342,12 +342,12 @@ nearest=event;
 
 if(nearest){
 latestEvent.innerHTML=
-`<h3>${nearest.title}</h3>
+`<p class="countdown" id="countdown"></p>
+<h3>${nearest.title}</h3>
 <img src="${nearest.image}" class="event-img">
 <p>📅 ${formatDate(nearest.start_date)}</p>
 <p>📍 ${nearest.location}</p>
-<p>${nearest.note}</p>
-<p class="countdown" id="countdown"></p>`;
+<p>${nearest.note}</p>`;
 startCountdown(nearest.start_date);
 }
 
@@ -377,17 +377,18 @@ const now = new Date();
 const diff = eventDate - now;
 
 if(diff <= 0){
-document.getElementById("countdown").innerHTML = "🎉 本日開催！";
+document.getElementById("countdown").innerHTML = "🔥 本日開催！";
 return;
 }
 
-const d = Math.floor(diff / 86400000);
-const h = Math.floor((diff % 86400000) / 3600000);
-const m = Math.floor((diff % 3600000) / 60000);
-const s = Math.floor((diff % 60000) / 1000);
+// 日・時間だけ計算（分秒は切り捨て）
+const totalHours = Math.floor(diff / 3600000);
+const days = Math.floor(totalHours / 24);
+const hours = totalHours % 24;
 
 document.getElementById("countdown").innerHTML =
-`⏳ ${eventDateStr} 開催まで あと ${d}日 ${h}時間 ${m}分 ${s}秒`;
+`⏳ あと ${days}日 ${hours}時間 で開催！`;
+
 },1000);
 }
 
@@ -396,3 +397,4 @@ loadTodayContent();
 
 </body>
 </html>
+
