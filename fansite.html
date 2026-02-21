@@ -472,9 +472,9 @@ data.forEach(item=>{
 
 let statusColor="#999";
 
-if(item.status==="検討中") statusColor="#b50012";
-if(item.status==="開発中") statusColor="#b50012";
-if(item.status==="アイデア") statusColor="#b50012";
+if(item.status==="アイデア") statusColor="#555";
+if(item.status==="検討中") statusColor="#555";
+if(item.status==="実装予定") statusColor="#b50012";
 if(item.status==="実装済") statusColor="#008800";
 
 document.getElementById("plannedFeatures").innerHTML +=
@@ -516,6 +516,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
