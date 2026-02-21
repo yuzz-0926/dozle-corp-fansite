@@ -95,17 +95,26 @@ margin-top:40px;
 
 .topnav{
 margin-top:10px;
-text-align:center;
+display:flex;
+overflow-x:auto;
+white-space:nowrap;
+gap:10px;
+padding-bottom:5px;
+}
+
+.topnav::-webkit-scrollbar{
+display:none; /* スクロールバー非表示 */
 }
 
 .topnav button{
+flex:0 0 auto;
 background:none;
 border:none;
 color:white;
-margin:0 10px;
 cursor:pointer;
 font-size:14px;
 font-weight:bold;
+padding:5px 10px;
 }
 
 .topnav button:hover{
@@ -499,6 +508,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
