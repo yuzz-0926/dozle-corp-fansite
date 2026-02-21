@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ドズル社ファンサイト</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background: linear-gradient(135deg, #ffefba, #ffffff);
+  color: #333;
+}
+
+header {
+  background: #ffcc00;
+  padding: 20px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  background: #ff9900;
+}
+
+nav button {
+  background: none;
+  border: none;
+  padding: 15px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+
+nav button:hover {
+  background: #ff6600;
+}
+
+.section {
+  display: none;
+  padding: 30px;
+}
+
+.active {
+  display: block;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  margin: 15px 0;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.countdown {
+  font-size: 24px;
+  color: #ff3366;
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  nav { flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+
+<header>🌈 ドズル社ファンまとめサイト 🌈</header>
+
+<nav>
+<button onclick="showSection('home')">🏠 ホーム</button>
+<button onclick="showSection('event')">📅 イベント</button>
+<button onclick="showSection('goods')">🛍️ グッズ</button>
+<button onclick="showSection('member')">👥 メンバー</button>
+</nav>
+
+<div id="home" class="section active">
+<h2>最新イベント</h2>
+<div id="latestEvent" class="card"></div>
+<div class="countdown" id="countdown"></div>
+</div>
+
+<div id="event" class="section">
+<h2>イベント一覧</h2>
+<div id="eventList"></div>
+</div>
+
+<div id="goods" class="section">
+<h2>グッズ情報</h2>
+<div id="goodsList"></div>
+</div>
+
+<div id="member" class="section">
+<h2>メンバー紹介</h2>
+<div class="card"><h3>ドズル</h3><p>リーダー。明るく元気な実況！</p></div>
+<div class="card"><h3>ぼんじゅうる</h3><p>優しい雰囲気と安定感。</p></div>
+<div class="card"><h3>おんりー</h3><p>高いゲームスキル！</p></div>
+<div class="card"><h3>おらふくん</h3><p>独特な世界観。</p></div>
+<div class="card"><h3>おおはらMEN</h3><p>ムードメーカー。</p></div>
+</div>
+
+<script>
+function showSection(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+const eventsURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=0&single=true&output=csv";
+const goodsURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=1794976478&single=true&output=csv";
+
+// 安全なCSVパーサー
+function parseCSV(text){
+const rows = text.trim().split("\n");
+const headers = rows.shift().split(",");
+return rows.map(row=>{
+const values = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+return headers.reduce((obj, header, i)=>{
+obj[header.trim()] = values ? values[i]?.replace(/^"|"$/g,"") : "";
+return obj;
+},{});
+});
+}
+
+// イベント取得
+fetch(eventsURL)
+.then(res=>res.text())
+.then(text=>{
+const data = parseCSV(text);
+
+let nearestEvent = null;
+let nearestTime = Infinity;
+
+data.forEach(event=>{
+const eventTime = new Date(event.date).getTime();
+
+const card = `
+<div class="card">
+<h3>${event.title}</h3>
+<p>📅 ${event.date}</p>
+<p>📍 ${event.location}</p>
+<p>${event.note}</p>
+</div>`;
+document.getElementById("eventList").innerHTML += card;
+
+if(eventTime > Date.now() && eventTime < nearestTime){
+nearestTime = eventTime;
+nearestEvent = event;
+}
+});
+
+if(nearestEvent){
+document.getElementById("latestEvent").innerHTML = `
+<h3>${nearestEvent.title}</h3>
+<p>📅 ${nearestEvent.date}</p>
+<p>📍 ${nearestEvent.location}</p>
+<p>${nearestEvent.note}</p>
+`;
+startCountdown(nearestTime);
+}
+});
+
+// グッズ取得
+fetch(goodsURL)
+.then(res=>res.text())
+.then(text=>{
+const data = parseCSV(text);
+
+data.forEach(item=>{
+const card = `
+<div class="card">
+<h3>${item.name}</h3>
+<p>💰 ${item.price}円</p>
+<p>${item.description}</p>
+</div>`;
+document.getElementById("goodsList").innerHTML += card;
+});
+});
+
+// カウントダウン
+function startCountdown(time){
+setInterval(()=>{
+const now = Date.now();
+const diff = time - now;
+
+if(diff <= 0){
+document.getElementById("countdown").innerHTML = "🎉 本日開催！ 🎉";
+return;
+}
+
+const d = Math.floor(diff/(1000*60*60*24));
+const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+const m = Math.floor((diff%(1000*60*60))/(1000*60));
+const s = Math.floor((diff%(1000*60))/1000);
+
+document.getElementById("countdown").innerHTML =
+`開催まで ${d}日 ${h}時間 ${m}分 ${s}秒`;
+},1000);
+}
+</script>
+
+</body>
+</html>
