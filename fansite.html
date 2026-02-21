@@ -111,6 +111,28 @@ font-weight:bold;
 .topnav button:hover{
 text-decoration:underline;
 }
+
+.guide-box{
+background:#fff5f5;
+padding:20px;
+border-left:6px solid #d90000;
+margin-bottom:30px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.feature-card{
+background:white;
+padding:20px;
+margin-bottom:15px;
+border-left:6px solid #111;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.feature-card h3{
+margin-top:0;
+color:#d90000;
+}
+
 </style>
 </head>
 
@@ -124,6 +146,7 @@ text-decoration:underline;
 <button onclick="showSection('event')">イベント</button>
 <button onclick="showSection('goods')">グッズ</button>
 <button onclick="showSection('member')">メンバー</button>
+<button onclick="showSection('guide')">使い方</button>
 </nav>
 </header>
 <main>
@@ -158,6 +181,42 @@ text-decoration:underline;
 <div class="card"><h3>おおはらMEN</h3><p>ズボラな匠</p></div>
 </div>
 
+<div id="guide" class="section">
+<h2>このサイトについて</h2>
+
+<div class="guide-box">
+<p>
+このサイトは、<strong style="color:#d90000;">ドズル社を応援する気持ちで個人で作った</strong>非公式ファンサイトです。
+</p>
+<p>
+イベントやグッズ情報を見やすくまとめ、動画や用語をランダム表示することで、
+ドズル社をもっと楽しめることを目的としています。
+</p>
+</div>
+
+<h2 style="margin-top:40px;">主な機能</h2>
+
+<div class="feature-card">
+<h3>🔍 今日のドズル社</h3>
+<p>動画または用語をランダムで1件表示します。</p>
+</div>
+
+<div class="feature-card">
+<h3>📅 イベント参加チェック</h3>
+<p>参加予定ボタンを押すと、自分だけの参加予定一覧に保存されます。</p>
+</div>
+
+<div class="feature-card">
+<h3>⏳ カウントダウン機能</h3>
+<p>直近イベントまでの残り時間を自動表示します。</p>
+</div>
+
+<div class="feature-card">
+<h3>🛍️ グッズ一覧</h3>
+<p>最新グッズ情報をまとめて確認できます。</p>
+</div>
+
+</div>
 </main>
 
 <footer>
@@ -323,4 +382,5 @@ loadTodayContent();
 
 </body>
 </html>
+
 
