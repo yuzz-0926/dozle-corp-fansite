@@ -647,9 +647,11 @@ fetch(videosURL).then(r=>r.text()).then(text=>{
 const data=parseCSV(text);
 if(!data.length)return;
 const random=data[Math.floor(Math.random()*data.length)];
+const thumb = getYouTubeThumbnail(random.url);
+
 todayBox.innerHTML=
 `<h3>🌟 ランダムドズル社データ【動画】</h3>
-${random.thumbnail ? `<img src="${random.thumbnail}" class="random-thumb">` : ""}
+${thumb ? `<img src="${thumb}" class="random-thumb">` : ""}
 <p><strong>${random.title}</strong></p>
 <p><a href="${random.url}" target="_blank">▶ 動画を見る</a></p>`;
 });
@@ -658,9 +660,11 @@ fetch(wordsURL).then(r=>r.text()).then(text=>{
 const data=parseCSV(text);
 if(!data.length)return;
 const random=data[Math.floor(Math.random()*data.length)];
+const thumb = getYouTubeThumbnail(random.url);
+
 todayBox.innerHTML=
 `<h3>🌟 ランダムドズル社データ【用語】</h3>
-${random.thumbnail ? `<img src="${random.thumbnail}" class="random-thumb">` : ""}
+${thumb ? `<img src="${thumb}" class="random-thumb">` : ""}
 <p><strong>${random.word}</strong></p>
 <p>${random.description}</p>
 ${random.url ? `<p><a href="${random.url}" target="_blank">▶ 関連動画を見る</a></p>` : ""}`;
@@ -812,6 +816,27 @@ document.getElementById("countdown").innerHTML =
 },1000);
 }
 
+function getYouTubeThumbnail(url){
+
+if(!url) return "";
+
+// 通常のwatch?v=形式
+let videoId = null;
+
+if(url.includes("watch?v=")){
+videoId = url.split("watch?v=")[1].split("&")[0];
+}
+
+// youtu.be形式
+if(url.includes("youtu.be/")){
+videoId = url.split("youtu.be/")[1].split("?")[0];
+}
+
+if(!videoId) return "";
+
+return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+}
+  
 function filterPlanned(status){
 
 const buttons = document.querySelectorAll(".filter-btn");
@@ -840,5 +865,6 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
