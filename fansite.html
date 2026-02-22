@@ -696,7 +696,7 @@ const random=data[Math.floor(Math.random()*data.length)];
 const thumb = getYouTubeThumbnail(random.url);
 
 todayBox.innerHTML=
-`<h3>🌟 ランダムドズル社データ【用語】</h3>
+`<h3>🌟 ランダムドズル社データ【動画】</h3>
 
 <div class="random-card">
 
@@ -707,10 +707,9 @@ todayBox.innerHTML=
   ` : ""}
 
   <div class="random-content">
-    <p class="random-title">${random.word}</p>
-    <p>${random.description}</p>
+    <p class="random-title">${random.title}</p>
     ${random.url && random.url.trim() !== "" ?
-    `<p><a href="${random.url}" target="_blank">▶ 関連動画を見る</a></p>`
+    `<p><a href="${random.url}" target="_blank">▶ 動画を見る</a></p>`
     : ""}
   </div>
 
@@ -940,6 +939,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
