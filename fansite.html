@@ -344,6 +344,14 @@ color:white;
 .filter-btn:hover{
 opacity:0.8;
 }
+
+.random-thumb{
+width:100%;
+max-width:320px;
+border-radius:10px;
+margin:10px 0;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
   
 </style>
 </head>
@@ -641,6 +649,7 @@ if(!data.length)return;
 const random=data[Math.floor(Math.random()*data.length)];
 todayBox.innerHTML=
 `<h3>🌟 ランダムドズル社データ【動画】</h3>
+${random.thumbnail ? `<img src="${random.thumbnail}" class="random-thumb">` : ""}
 <p><strong>${random.title}</strong></p>
 <p><a href="${random.url}" target="_blank">▶ 動画を見る</a></p>`;
 });
@@ -651,8 +660,10 @@ if(!data.length)return;
 const random=data[Math.floor(Math.random()*data.length)];
 todayBox.innerHTML=
 `<h3>🌟 ランダムドズル社データ【用語】</h3>
+${random.thumbnail ? `<img src="${random.thumbnail}" class="random-thumb">` : ""}
 <p><strong>${random.word}</strong></p>
-<p>${random.description}</p>`;
+<p>${random.description}</p>
+${random.url ? `<p><a href="${random.url}" target="_blank">▶ 関連動画を見る</a></p>` : ""}`;
 });
 }
 }
@@ -829,4 +840,5 @@ loadTodayContent();
 
 </body>
 </html>
+
 
