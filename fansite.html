@@ -354,7 +354,51 @@ object-fit:cover;
 border-radius:12px;
 margin:0 0 12px 0;
 }
- 
+
+.random-card{
+display:flex;
+gap:20px;
+align-items:flex-start;
+
+background:white;
+padding:20px;
+border-radius:14px;
+box-shadow:0 4px 14px rgba(0,0,0,0.05);
+}
+
+.random-thumb-box{
+flex:0 0 260px;
+}
+
+.random-thumb{
+width:100%;
+border-radius:12px;
+object-fit:cover;
+aspect-ratio:16/9;
+}
+
+.random-content{
+flex:1;
+}
+
+.random-title{
+font-size:18px;
+font-weight:bold;
+margin:0 0 8px 0;
+}
+
+@media (max-width: 768px){
+
+.random-card{
+flex-direction:column;
+}
+
+.random-thumb-box{
+flex:unset;
+}
+
+}
+
 </style>
 </head>
 
@@ -652,12 +696,25 @@ const random=data[Math.floor(Math.random()*data.length)];
 const thumb = getYouTubeThumbnail(random.url);
 
 todayBox.innerHTML=
-`<h3>🌟 ランダムドズル社データ【動画】</h3>
-${thumb ? `<img src="${thumb}" class="random-thumb">` : ""}
-<p><strong>${random.title}</strong></p>
-${random.url && random.url.trim() !== "" ?
-`<p><a href="${random.url}" target="_blank">▶ 動画を見る</a></p>`
-: ""}`;
+`<h3>🌟 ランダムドズル社データ【用語】</h3>
+
+<div class="random-card">
+
+  ${thumb ? `
+  <div class="random-thumb-box">
+    <img src="${thumb}" class="random-thumb">
+  </div>
+  ` : ""}
+
+  <div class="random-content">
+    <p class="random-title">${random.word}</p>
+    <p>${random.description}</p>
+    ${random.url && random.url.trim() !== "" ?
+    `<p><a href="${random.url}" target="_blank">▶ 関連動画を見る</a></p>`
+    : ""}
+  </div>
+
+</div>`;
 });
 }else{
 fetch(wordsURL).then(r=>r.text()).then(text=>{
@@ -668,12 +725,24 @@ const thumb = getYouTubeThumbnail(random.url);
 
 todayBox.innerHTML=
 `<h3>🌟 ランダムドズル社データ【用語】</h3>
-${thumb ? `<img src="${thumb}" class="random-thumb">` : ""}
-<p><strong>${random.word}</strong></p>
-<p>${random.description}</p>
-${random.url && random.url.trim() !== "" ?
-`<p><a href="${random.url}" target="_blank">▶ 関連動画を見る</a></p>`
-: ""}`;
+
+<div class="random-card">
+
+  ${thumb ? `
+  <div class="random-thumb-box">
+    <img src="${thumb}" class="random-thumb">
+  </div>
+  ` : ""}
+
+  <div class="random-content">
+    <p class="random-title">${random.word}</p>
+    <p>${random.description}</p>
+    ${random.url && random.url.trim() !== "" ?
+    `<p><a href="${random.url}" target="_blank">▶ 関連動画を見る</a></p>`
+    : ""}
+  </div>
+
+</div>`;
 });
 }
 }
@@ -871,6 +940,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
