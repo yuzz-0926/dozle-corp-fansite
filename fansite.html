@@ -265,6 +265,86 @@ text-align:left;
 font-size:20px;
 }
 
+.planned-card{
+background:white;
+padding:16px 18px;
+margin-bottom:14px;
+border-radius:12px;
+box-shadow:0 4px 10px rgba(0,0,0,0.06);
+transition:0.2s;
+}
+
+.planned-card:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 18px rgba(0,0,0,0.1);
+}
+
+.planned-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.planned-title{
+font-weight:bold;
+font-size:16px;
+}
+
+.planned-badge{
+font-size:12px;
+padding:4px 10px;
+border-radius:999px;
+color:white;
+}
+
+/* ステータス別色 */
+.planned-card.アイデア .planned-badge{
+background:#555;
+}
+
+.planned-card.検討中 .planned-badge{
+background:#777;
+}
+
+.planned-card.実装予定 .planned-badge{
+background:#b50012;
+}
+
+.planned-card.実装済 .planned-badge{
+background:#008800;
+}
+
+.planned-note{
+margin-top:8px;
+font-size:13px;
+color:#555;
+}
+
+.planned-filter{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin-bottom:20px;
+}
+
+.filter-btn{
+padding:6px 12px;
+border-radius:999px;
+border:none;
+background:#eee;
+cursor:pointer;
+font-size:13px;
+}
+
+.filter-btn.active{
+background:#b50012;
+color:white;
+}
+
+.filter-btn:hover{
+opacity:0.8;
+}
+  
 </style>
 </head>
 
@@ -482,6 +562,15 @@ font-size:20px;
   
 <div id="planned" class="section">
   <h2>🛠 現在検討中の機能</h2>
+
+  <div class="planned-filter">
+    <button class="filter-btn active" onclick="filterPlanned('all')">すべて</button>
+    <button class="filter-btn" onclick="filterPlanned('アイデア')">アイデア</button>
+    <button class="filter-btn" onclick="filterPlanned('検討中')">検討中</button>
+    <button class="filter-btn" onclick="filterPlanned('実装予定')">実装予定</button>
+    <button class="filter-btn" onclick="filterPlanned('実装済')">実装済</button>
+  </div>
+
   <div id="plannedFeaturesPage"></div>
 </div>
   
@@ -671,17 +760,13 @@ return;
 
 data.forEach(item=>{
 
-let statusColor="#999";
-if(item.status==="アイデア") statusColor="#555";
-if(item.status==="検討中") statusColor="555";
-if(item.status==="実装予定") statusColor="#b50012";
-if(item.status==="実装済") statusColor="#008800";
-
 const html = `
-<div class="feature-card">
-<h3>${item.title}</h3>
-<p><strong style="color:${statusColor};">${item.status}</strong></p>
-${item.note ? `<p>${item.note}</p>` : ""}
+<div class="planned-card" data-status="${item.status}">
+  <div class="planned-header">
+    <span class="planned-title">${item.title}</span>
+    <span class="planned-badge">${item.status}</span>
+  </div>
+  ${item.note ? `<div class="planned-note">${item.note}</div>` : ""}
 </div>
 `;
 
@@ -716,43 +801,31 @@ document.getElementById("countdown").innerHTML =
 },1000);
 }
 
+function filterPlanned(status){
+
+const buttons = document.querySelectorAll(".filter-btn");
+buttons.forEach(btn=>btn.classList.remove("active"));
+
+event.target.classList.add("active");
+
+const cards = document.querySelectorAll(".planned-card");
+
+cards.forEach(card=>{
+if(status==="all"){
+card.style.display="block";
+}else{
+if(card.dataset.status===status){
+card.style.display="block";
+}else{
+card.style.display="none";
+}
+}
+});
+
+}
+  
 loadTodayContent();
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
