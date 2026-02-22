@@ -298,19 +298,19 @@ color:white;
 }
 
 /* ステータス別色 */
-.planned-card.アイデア .planned-badge{
+.planned-card[data-status="アイデア"] .planned-badge{
 background:#555;
 }
 
-.planned-card.検討中 .planned-badge{
+.planned-card[data-status="検討中"] .planned-badge{
 background:#777;
 }
 
-.planned-card.実装予定 .planned-badge{
+.planned-card[data-status="実装予定"] .planned-badge{
 background:#b50012;
 }
 
-.planned-card.実装済 .planned-badge{
+.planned-card[data-status="実装済"] .planned-badge{
 background:#008800;
 }
 
@@ -829,3 +829,4 @@ loadTodayContent();
 
 </body>
 </html>
+
