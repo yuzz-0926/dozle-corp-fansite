@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>【非公式】ドズル社データベース</title>
@@ -13,37 +14,77 @@ background:#f4f4f4;
 color:#222;
 }
 
-/* 固定ナビ */
-header{
+/* ===== ヘッダー全体 ===== */
+.main-header{
 position:fixed;
 top:0;
 width:100%;
-background:#d90000; /* 赤に変更 */
+background:#d90000;
 color:white;
-padding:15px 20px 5px 20px;
 z-index:1000;
 }
 
+/* 上段 */
+.header-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 20px;
+}
+
+.logo{
+font-weight:bold;
+font-size:18px;
+}
+
+.header-icons button{
+background:none;
+border:none;
+color:white;
+cursor:pointer;
+margin-left:15px;
+}
+
+.header-icons .material-symbols-outlined{
+font-size:24px;
+}
+
+/* 下段ナビ */
+.main-nav{
+display:flex;
+justify-content:space-around;
+align-items:center;
+padding:10px 0;
+border-top:1px solid rgba(255,255,255,0.3);
+}
+
+.main-nav button{
+background:none;
+border:none;
+color:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+font-size:12px;
+cursor:pointer;
+}
+
+.main-nav .material-symbols-outlined{
+font-size:22px;
+margin-bottom:2px;
+}
+
+.main-nav button:hover{
+opacity:0.8;
+}
+  
 header .title{
 font-size:18px;
 font-weight:bold;
 }
 
-nav button{
-background:none;
-border:none;
-color:white;
-margin-left:15px;
-cursor:pointer;
-font-size:14px;
-}
-
-nav button:hover{
-color:#ff3b3b;
-}
-
 main{
-margin-top:110px;
+margin-top:140px;
 padding:20px;
 }
 
@@ -93,34 +134,6 @@ text-align:center;
 margin-top:40px;
 }
 
-.topnav{
-margin-top:10px;
-display:flex;
-overflow-x:auto;
-white-space:nowrap;
-gap:10px;
-padding-bottom:5px;
-}
-
-.topnav::-webkit-scrollbar{
-display:none; /* スクロールバー非表示 */
-}
-
-.topnav button{
-flex:0 0 auto;
-background:none;
-border:none;
-color:white;
-cursor:pointer;
-font-size:14px;
-font-weight:bold;
-padding:5px 10px;
-}
-
-.topnav button:hover{
-text-decoration:underline;
-}
-
 .guide-box{
 background:#fff5f5;
 padding:20px;
@@ -147,17 +160,45 @@ color:#d90000;
 
 <body>
 
-<header>
-<div class="title">【非公式】ドズル社データベース</div>
+<header class="main-header">
 
-<nav class="topnav">
-<button onclick="showSection('home')">ホーム</button>
-<button onclick="showSection('event')">イベント</button>
-<button onclick="showSection('goods')">グッズ</button>
-<button onclick="showSection('member')">メンバー</button>
-<button onclick="showSection('guide')">Guide</button>
-<button onclick="showSection('contact')">Contact</button>
-</nav>
+  <!-- 上段 -->
+  <div class="header-top">
+    <div class="logo">【非公式】ドズル社DB</div>
+
+    <div class="header-icons">
+      <button onclick="showSection('guide')">
+        <span class="material-symbols-outlined">help</span>
+      </button>
+      <button onclick="showSection('contact')">
+        <span class="material-symbols-outlined">mail</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 下段メインナビ -->
+  <nav class="main-nav">
+    <button onclick="showSection('home')">
+      <span class="material-symbols-outlined">home</span>
+      <span>ホーム</span>
+    </button>
+
+    <button onclick="showSection('event')">
+      <span class="material-symbols-outlined">event</span>
+      <span>イベント</span>
+    </button>
+
+    <button onclick="showSection('goods')">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>グッズ</span>
+    </button>
+
+    <button onclick="showSection('member')">
+      <span class="material-symbols-outlined">groups</span>
+      <span>メンバー</span>
+    </button>
+  </nav>
+
 </header>
 <main>
 
@@ -512,6 +553,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
