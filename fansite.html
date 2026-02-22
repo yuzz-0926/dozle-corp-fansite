@@ -247,6 +247,28 @@ justify-content:space-around;
 }
 
 }
+
+.mobile-menu button{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:16px;
+padding:12px 15px;
+width:100%;
+background:none;
+border:none;
+color:#222;
+text-align:left;
+}
+
+.mobile-menu button .material-symbols-outlined{
+font-size:20px;
+}
+
+.mobile-menu button:hover{
+background:#f2f2f2;
+}
+
 </style>
 </head>
 
@@ -282,9 +304,22 @@ justify-content:space-around;
 
   <!-- スマホ用メニュー -->
   <div id="mobileMenu" class="mobile-menu">
-    <button onclick="showSection('guide'); toggleMenu()">使い方</button>
-    <button onclick="showSection('contact'); toggleMenu()">お問い合わせ</button>
-    <button onclick="showSection('planned'); toggleMenu()">現在検討中の機能</button>
+
+    <button onclick="showSection('guide'); toggleMenu()">
+      <span class="material-symbols-outlined">help</span>
+      使い方
+    </button>
+
+    <button onclick="showSection('contact'); toggleMenu()">
+      <span class="material-symbols-outlined">mail</span>
+      お問い合わせ
+    </button>
+
+    <button onclick="showSection('planned'); toggleMenu()">
+      <span class="material-symbols-outlined">build</span>
+      現在検討中の機能
+    </button>
+
   </div>
 
   <!-- 下段メインナビ -->
@@ -690,6 +725,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
