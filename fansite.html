@@ -58,15 +58,40 @@ padding:10px 0;
 border-top:1px solid rgba(255,255,255,0.3);
 }
 
+/* 非選択タブ */
 .main-nav button{
 background:none;
 border:none;
-color:white;
+color:rgba(255,255,255,0.7); /* 薄い白 */
 display:flex;
 flex-direction:column;
 align-items:center;
 font-size:12px;
 cursor:pointer;
+padding:8px 16px;
+position:relative;
+}
+
+/* ホバー */
+.main-nav button:hover{
+color:white;
+}
+
+/* 選択中タブ */
+.main-nav button.active-tab{
+color:white;
+}
+
+/* 白い下線 */
+.main-nav button.active-tab::after{
+content:"";
+position:absolute;
+bottom:0;
+left:20%;
+width:60%;
+height:3px;
+background:white;
+border-radius:2px;
 }
 
 .main-nav .material-symbols-outlined{
@@ -178,7 +203,7 @@ color:#d90000;
 
   <!-- 下段メインナビ -->
   <nav class="main-nav">
-    <button onclick="showSection('home')">
+    <button onclick="showSection('home')" class="active-tab">
       <span class="material-symbols-outlined">home</span>
       <span>ホーム</span>
     </button>
@@ -355,8 +380,20 @@ color:#d90000;
 
 <script>
 function showSection(id){
+
+// セクション切り替え
 document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
 document.getElementById(id).classList.add('active');
+
+// タブのアクティブ切り替え
+document.querySelectorAll('.main-nav button').forEach(btn=>{
+btn.classList.remove('active-tab');
+});
+
+const activeBtn = document.querySelector(`.main-nav button[onclick="showSection('${id}')"]`);
+if(activeBtn){
+activeBtn.classList.add('active-tab');
+}
 }
 
 const eventsURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=0&single=true&output=csv";
@@ -553,6 +590,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
