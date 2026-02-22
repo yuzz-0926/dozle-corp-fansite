@@ -13,7 +13,20 @@ font-family:Arial, sans-serif;
 background:#f4f4f4;
 color:#222;
 }
+  
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:bold;
+font-size:18px;
+}
 
+.site-icon{
+width:28px;
+height:28px;
+object-fit:contain;
+}
 /* ===== ヘッダー全体 ===== */
 .main-header{
 position:fixed;
@@ -189,7 +202,10 @@ color:#d90000;
 
   <!-- 上段 -->
   <div class="header-top">
-    <div class="logo">【非公式】ドズル社データベース</div>
+    <div class="logo">
+      <img src="icon.png" class="site-icon">
+      <span>【非公式】ドズル社DB</span>
+    </div>
 
     <div class="header-icons">
       <button onclick="showSection('guide')">
@@ -590,6 +606,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
