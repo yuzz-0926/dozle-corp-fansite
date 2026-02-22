@@ -269,6 +269,9 @@ justify-content:space-around;
       <button onclick="showSection('contact')">
         <span class="material-symbols-outlined">mail</span>
       </button>
+      <button onclick="showSection('planned')">
+        <span class="material-symbols-outlined">build</span>
+      </button>
     </div>
 
     <!-- スマホ用ハンバーガー -->
@@ -281,6 +284,7 @@ justify-content:space-around;
   <div id="mobileMenu" class="mobile-menu">
     <button onclick="showSection('guide'); toggleMenu()">使い方</button>
     <button onclick="showSection('contact'); toggleMenu()">お問い合わせ</button>
+    <button onclick="showSection('planned'); toggleMenu()">現在検討中の機能</button>
   </div>
 
   <!-- 下段メインナビ -->
@@ -377,9 +381,6 @@ justify-content:space-around;
 <h3>🛍️ グッズ情報（グッズタブ）</h3>
 <p>グッズ情報をピックアップして表示します。</p>
 </div>
-
-<h2 style="margin-top:40px;">🛠 現在検討中の機能</h2>
-<div id="plannedFeatures"></div>
   
 <h2 style="margin-top:40px;">⚠ 注意事項</h2>
 
@@ -447,7 +448,12 @@ justify-content:space-around;
 
 </div>
 </div>
-
+  
+<div id="planned" class="section">
+  <h2>🛠 現在検討中の機能</h2>
+  <div id="plannedFeaturesPage"></div>
+</div>
+  
 </div>
 </main>
 
@@ -623,27 +629,34 @@ goodsList.innerHTML+=
 fetch(plannedURL).then(r=>r.text()).then(text=>{
 const data=parseCSV(text);
 
+const box1 = document.getElementById("plannedFeatures");
+const box2 = document.getElementById("plannedFeaturesPage");
+
 if(!data.length){
-document.getElementById("plannedFeatures").innerHTML =
-"<p>現在検討中の機能はありません。</p>";
+if(box1) box1.innerHTML="<p>現在検討中の機能はありません。</p>";
+if(box2) box2.innerHTML="<p>現在検討中の機能はありません。</p>";
 return;
 }
 
 data.forEach(item=>{
 
 let statusColor="#999";
-
 if(item.status==="アイデア") statusColor="#555";
-if(item.status==="検討中") statusColor="#555";
+if(item.status==="検討中") statusColor="555";
 if(item.status==="実装予定") statusColor="#b50012";
 if(item.status==="実装済") statusColor="#008800";
 
-document.getElementById("plannedFeatures").innerHTML +=
-`<div class="feature-card">
+const html = `
+<div class="feature-card">
 <h3>${item.title}</h3>
 <p><strong style="color:${statusColor};">${item.status}</strong></p>
 ${item.note ? `<p>${item.note}</p>` : ""}
-</div>`;
+</div>
+`;
+
+if(box1) box1.innerHTML += html;
+if(box2) box2.innerHTML += html;
+
 });
 });
   
@@ -677,6 +690,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
