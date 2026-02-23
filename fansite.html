@@ -401,12 +401,16 @@ aspect-ratio:16/9;
 }
 
 .random-title{
-white-space:nowrap;
-font-size: clamp(16px, 4vw, 22px);
-font-weight:bold;
-margin:0 0 8px 0;
+  font-size:18px;
+  font-weight:bold;
+  margin:0 0 8px 0;
 }
 
+.random-heading{
+  white-space:nowrap;
+  font-size: clamp(16px, 4.5vw, 22px);
+}
+  
 @media (max-width: 768px){
 
 .random-card{
@@ -799,7 +803,7 @@ const random=data[Math.floor(Math.random()*data.length)];
 const thumb = getYouTubeThumbnail(random.url);
 
 todayBox.innerHTML=
-`<h3>🌟 ランダムドズル社データ【動画】</h3>
+`<h3 class="random-heading">🌟 ランダムドズル社データ【動画】</h3>`
 
 <div class="random-card">
 
@@ -826,7 +830,7 @@ const random=data[Math.floor(Math.random()*data.length)];
 const thumb = getYouTubeThumbnail(random.url);
 
 todayBox.innerHTML=
-`<h3>🌟 ランダムドズル社データ【用語】</h3>
+`<h3 class="random-heading">🌟 ランダムドズル社データ【用語】</h3>`
 
 <div class="random-card">
 
@@ -1066,6 +1070,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
