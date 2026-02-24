@@ -148,17 +148,24 @@ border-radius:6px;
 }
 
 .event-btn{
-background:#ff3b3b;
-color:white;
-border:none;
-padding:6px 10px;
-cursor:pointer;
-border-radius:4px;
-margin-top:8px;
+  margin-top:15px;
+  padding:12px 22px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+  background:#b50012;
+  color:white;
+  transition:0.3s;
 }
 
 .event-btn:hover{
-background:#cc0000;
+  transform:translateY(-2px);
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.event-btn.joined{
+  background:#0a8f2a;
 }
 
 .countdown{
@@ -991,15 +998,36 @@ const dateText=event.start_date===event.end_date
 const joined=myEvents.includes(event.title);
 const btnText=joined?"参加予定✔":"参加予定にする";
 
-eventList.innerHTML+=
-`<div class="card">
-<h3>${event.title}</h3>
-<img src="${event.image}" class="event-img">
-<p>📅 ${dateText}</p>
-<p>📍 ${event.location}</p>
-<p>${event.note}</p>
-<button class="event-btn" onclick="toggleEvent('${event.title}')">${btnText}</button>
-</div>`;
+eventList.innerHTML += `
+  <div class="goods-series-card event">
+
+    <div class="goods-series-image">
+      <img src="${event.image}">
+    </div>
+
+    <div class="goods-series-content">
+
+      <h3 class="goods-series-title">
+        ${event.title}
+      </h3>
+
+      <p>📅 ${dateText}</p>
+      <p>📍 ${event.location}</p>
+
+      <p class="goods-series-description">
+        ${event.note || ""}
+      </p>
+
+      <button 
+        class="event-btn ${joined ? "joined" : ""}" 
+        onclick="toggleEvent('${event.title}')">
+        ${btnText}
+      </button>
+
+    </div>
+
+  </div>
+`;
 
 if(eventTime>Date.now()&&eventTime<nearestTime){
 nearestTime=eventTime;
@@ -1207,6 +1235,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
