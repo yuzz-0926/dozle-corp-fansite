@@ -168,6 +168,14 @@ border-radius:6px;
   background:#0a8f2a;
 }
 
+.event-button-area{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-top:18px;
+}
+
 .countdown{
 font-weight:bold;
 color:#ff3b3b;
@@ -1018,11 +1026,23 @@ eventList.innerHTML += `
         ${event.note || ""}
       </p>
 
-      <button 
-        class="event-btn ${joined ? "joined" : ""}" 
-        onclick="toggleEvent('${event.title}')">
-        ${btnText}
-      </button>
+      <div class="event-button-area">
+
+        ${event.link1 && event.link1.trim() !== "" ?
+          `<a href="${event.link1}" target="_blank" class="goods-btn">詳細</a>`
+        : ""}
+
+        ${event.link2 && event.link2.trim() !== "" ?
+          `<a href="${event.link2}" target="_blank" class="goods-btn sub">関連</a>`
+        : ""}
+
+        <button 
+          class="event-btn ${joined ? "joined" : ""}" 
+          onclick="toggleEvent('${event.title}')">
+          ${btnText}
+        </button>
+
+      </div>
 
     </div>
 
@@ -1235,6 +1255,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
