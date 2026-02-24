@@ -1029,11 +1029,11 @@ eventList.innerHTML += `
       <div class="event-button-area">
 
         ${event.link1 && event.link1.trim() !== "" ?
-          `<a href="${event.link1}" target="_blank" class="goods-btn">詳細</a>`
+          `<a href="${event.link1}" target="_blank" class="goods-btn">特設サイト</a>`
         : ""}
 
         ${event.link2 && event.link2.trim() !== "" ?
-          `<a href="${event.link2}" target="_blank" class="goods-btn sub">関連</a>`
+          `<a href="${event.link2}" target="_blank" class="goods-btn sub">公式サイト</a>`
         : ""}
 
         <button 
@@ -1131,11 +1131,11 @@ fetch(goodsURL)
             <div class="goods-buttons">
 
               ${item.link1 && item.link1.trim() !== "" ? 
-                `<a href="${item.link1}" target="_blank" class="goods-btn">詳細はこちら</a>` 
+                `<a href="${item.link1}" target="_blank" class="goods-btn">ご購入はこちら</a>` 
               : ""}
 
               ${item.link2 && item.link2.trim() !== "" ? 
-                `<a href="${item.link2}" target="_blank" class="goods-btn sub">関連ページ</a>` 
+                `<a href="${item.link2}" target="_blank" class="goods-btn sub">商品説明ページ</a>` 
               : ""}
 
             </div>
@@ -1255,6 +1255,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
