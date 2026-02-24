@@ -1047,6 +1047,12 @@ fetch(goodsURL)
   .then(res => res.text())
   .then(text => {
     const data = parseCSV(text);
+    // 販売中を上に並べる
+    data.sort((a, b) => {
+      if (a.status === "販売中" && b.status !== "販売中") return -1;
+      if (a.status !== "販売中" && b.status === "販売中") return 1;
+      return 0;
+    });
     let html = "";
 
     data.forEach(item => {
@@ -1201,6 +1207,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
