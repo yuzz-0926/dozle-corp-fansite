@@ -494,7 +494,95 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
     0 12px 32px rgba(0,0,0,0.18),
     0 4px 10px rgba(0,0,0,0.12);
 }
-  
+
+.goods-series-card{
+  display:flex;
+  gap:40px;
+  align-items:center;
+
+  background:white;
+  padding:40px;
+  border-radius:18px;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  margin-bottom:50px;
+}
+
+.goods-series-image img{
+  width:420px;
+  border-radius:14px;
+}
+
+.goods-series-content{
+  flex:1;
+}
+
+.goods-series-title{
+  font-size:26px;
+  font-weight:800;
+  margin-bottom:15px;
+}
+
+.goods-series-description{
+  margin-bottom:15px;
+}
+
+.goods-series-status{
+  font-weight:700;
+  margin-bottom:20px;
+}
+
+.goods-series-status.active{
+  color:#0a8f2a;
+}
+
+.goods-series-status.ended{
+  color:#666;
+}
+
+.goods-buttons{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.goods-btn{
+  display:inline-block;
+  background:#0b1026;
+  color:white;
+  padding:14px 28px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:bold;
+  transition:0.3s;
+}
+
+.goods-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 6px 18px rgba(0,0,0,0.2);
+}
+
+.goods-btn.sub{
+  background:#555;
+}
+
+@media (max-width:768px){
+
+  .goods-series-card{
+    flex-direction:column;
+    padding:25px;
+    gap:20px;
+  }
+
+  .goods-series-image img{
+    width:100%;
+  }
+
+  .goods-series-title{
+    font-size:20px;
+  }
+
+}
 </style>
 </head>
 
@@ -592,7 +680,6 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 <div id="goods" class="section">
 <h2>グッズ情報</h2>
 <div id="goodsList"></div>
-</div>
 
 <div id="member" class="section">
 <h2>メンバー情報</h2>
@@ -956,18 +1043,57 @@ if(nearest){
 renderMyEvents();
 });
 
-fetch(goodsURL).then(r=>r.text()).then(text=>{
-const data=parseCSV(text);
-data.forEach(item=>{
-goodsList.innerHTML+=
-`<div class="card">
-<h3>${item.name}</h3>
-<img src="${item.image}" class="goods-img">
-<p>💰 ${item.price}円</p>
-<p>${item.description}</p>
-</div>`;
-});
-});
+fetch(goodsURL)
+  .then(res => res.text())
+  .then(text => {
+    const data = parseCSV(text);
+    let html = "";
+
+    data.forEach(item => {
+
+      const isActive = item.status === "販売中";
+
+      html += `
+        <div class="goods-series-card">
+
+          <div class="goods-series-image">
+            <img src="${item.image}">
+          </div>
+
+          <div class="goods-series-content">
+
+            <h3 class="goods-series-title">
+              ${item.series}
+            </h3>
+
+            <p class="goods-series-description">
+              ${item.description || ""}
+            </p>
+
+            <p class="goods-series-status ${isActive ? "active" : "ended"}">
+              ${isActive ? "🟢 販売中" : "⚫ 販売終了"}
+            </p>
+
+            <div class="goods-buttons">
+
+              ${item.link1 && item.link1.trim() !== "" ? 
+                `<a href="${item.link1}" target="_blank" class="goods-btn">詳細はこちら</a>` 
+              : ""}
+
+              ${item.link2 && item.link2.trim() !== "" ? 
+                `<a href="${item.link2}" target="_blank" class="goods-btn sub">関連ページ</a>` 
+              : ""}
+
+            </div>
+
+          </div>
+
+        </div>
+      `;
+    });
+
+    document.getElementById("goodsList").innerHTML = html;
+  });
 
 fetch(plannedURL).then(r=>r.text()).then(text=>{
 const data=parseCSV(text);
@@ -1075,6 +1201,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
