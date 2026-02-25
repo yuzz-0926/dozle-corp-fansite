@@ -870,17 +870,14 @@ function showSection(id){
 
   // タブのactive切り替え
   document.querySelectorAll('.main-nav button')
-    .forEach(btn=>btn.classList.remove('active-tab'));
+    .forEach(btn=>{
+      btn.classList.remove('active-tab');
 
-  // クリックされたボタンにactive-tabを付ける
-  const buttons = document.querySelectorAll('.main-nav button');
-
-  buttons.forEach(btn=>{
-    if(btn.getAttribute("onclick") === `showSection('${id}')`){
-      btn.classList.add("active-tab");
-    }
-  });
-
+      // クリックされたボタンにだけ付ける
+      if(btn.getAttribute("onclick")?.includes(`'${id}'`)){
+        btn.classList.add("active-tab");
+      }
+    });
 }
 
 function toggleMenu(){
@@ -1252,6 +1249,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
