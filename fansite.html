@@ -863,23 +863,22 @@ function showSection(id){
 
   // セクション切り替え
   document.querySelectorAll('.section')
-    .forEach(s=>s.classList.remove('active'));
+    .forEach(s => s.classList.remove('active'));
 
   document.getElementById(id)
     .classList.add('active');
 
-  // タブのactive切り替え
+  // タブのアクティブ切り替え
   document.querySelectorAll('.main-nav button')
-    .forEach(btn=>{
+    .forEach(btn => {
       btn.classList.remove('active-tab');
 
-      // クリックされたボタンにだけ付ける
-      if(btn.getAttribute("onclick")?.includes(`'${id}'`)){
-        btn.classList.add("active-tab");
+      if(btn.dataset.section === id){
+        btn.classList.add('active-tab');
       }
     });
 }
-
+  
 function toggleMenu(){
 const menu = document.getElementById("mobileMenu");
 menu.style.display = menu.style.display === "flex" ? "none" : "flex";
@@ -1249,6 +1248,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
