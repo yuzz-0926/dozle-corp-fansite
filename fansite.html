@@ -267,8 +267,18 @@ display:block;
 
 .main-nav{
 justify-content:space-around;
+display:flex;
 }
 
+.main-nav button{
+flex:1;              /* ← これが超重要 */
+padding:8px 4px;     /* 横余白を減らす */
+}
+
+.main-nav button span:last-child{
+font-size:11px;
+white-space:nowrap;
+}
 }
 
 .mobile-menu button{
@@ -1257,6 +1267,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
