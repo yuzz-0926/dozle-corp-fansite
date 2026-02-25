@@ -612,6 +612,84 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   }
 
 }
+
+.event-card-new{
+  display:flex;
+  gap:20px;
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  margin-bottom:20px;
+}
+
+.event-img-box{
+  flex:0 0 220px;
+}
+
+.event-img-new{
+  width:100%;
+  border-radius:14px;
+}
+
+.event-info{
+  flex:1;
+}
+
+.event-links{
+  margin:10px 0;
+}
+
+.event-link-btn{
+  display:inline-block;
+  padding:8px 14px;
+  background:black;
+  color:white;
+  border-radius:8px;
+  text-decoration:none;
+  margin-right:8px;
+}
+
+.event-link-btn.gray{
+  background:#888;
+}
+
+.event-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:10px;
+}
+
+.fav-btn{
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  background:white;
+  cursor:pointer;
+}
+
+.fav-btn.active{
+  background:#ff4d6d;
+  color:white;
+  border:none;
+}
+
+.event-status{
+  padding:6px;
+  border-radius:8px;
+}
+
+@media(max-width:768px){
+  .event-card-new{
+    flex-direction:column;
+  }
+
+  .event-img-box{
+    flex:none;
+  }
+}
+  
 </style>
 </head>
 
@@ -1019,46 +1097,43 @@ const joined=myEvents.includes(event.title);
 const btnText=joined?"参加予定✔":"参加予定にする";
 
 eventList.innerHTML += `
-  <div class="goods-series-card event">
+<div class="event-card-new">
 
-    <div class="goods-series-image">
-      <img src="${event.image}">
+  <div class="event-img-box">
+    <img src="${event.image}" class="event-img-new">
+  </div>
+
+  <div class="event-info">
+
+    <h3 class="event-title">${event.title}</h3>
+
+    <p>📅 ${dateText}</p>
+    <p>📍 ${event.location}</p>
+    <p>${event.note || ""}</p>
+
+    <div class="event-links">
+      ${event.link1 ? `<a href="${event.link1}" target="_blank" class="event-link-btn">特設サイト</a>` : ""}
+      ${event.link2 ? `<a href="${event.link2}" target="_blank" class="event-link-btn gray">公式サイト</a>` : ""}
     </div>
 
-    <div class="goods-series-content">
+    <div class="event-actions">
 
-      <h3 class="goods-series-title">
-        ${event.title}
-      </h3>
+      <button class="fav-btn ${isFav(event.title) ? 'active' : ''}"
+        onclick="toggleFavorite('${event.title}')">
+        ♡ お気に入り
+      </button>
 
-      <p>📅 ${dateText}</p>
-      <p>📍 ${event.location}</p>
-
-      <p class="goods-series-description">
-        ${event.note || ""}
-      </p>
-
-      <div class="event-button-area">
-
-        ${event.link1 && event.link1.trim() !== "" ?
-          `<a href="${event.link1}" target="_blank" class="goods-btn">特設サイト</a>`
-        : ""}
-
-        ${event.link2 && event.link2.trim() !== "" ?
-          `<a href="${event.link2}" target="_blank" class="goods-btn sub">公式サイト</a>`
-        : ""}
-
-        <button 
-          class="event-btn ${joined ? "joined" : ""}" 
-          onclick="toggleEvent('${event.title}')">
-          ${btnText}
-        </button>
-
-      </div>
+      <select class="event-status"
+        onchange="saveStatus('${event.title}', this.value)">
+        <option value="">選択しない</option>
+        <option value="予定" ${getStatus(event.title)==="予定"?"selected":""}>参加予定</option>
+        <option value="済" ${getStatus(event.title)==="済"?"selected":""}>参加済</option>
+      </select>
 
     </div>
 
   </div>
+</div>
 `;
 
 if(eventTime>Date.now()&&eventTime<nearestTime){
@@ -1261,12 +1336,48 @@ card.style.display="none";
 });
 
 }
+
+// ===== お気に入り =====
+function getFavorites(){
+  return JSON.parse(localStorage.getItem("favorites") || "[]");
+}
+
+function isFav(title){
+  return getFavorites().includes(title);
+}
+
+function toggleFavorite(title){
+  let favs = getFavorites();
+
+  if(favs.includes(title)){
+    favs = favs.filter(t=>t!==title);
+  }else{
+    favs.push(title);
+  }
+
+  localStorage.setItem("favorites", JSON.stringify(favs));
+  location.reload();
+}
+
+
+// ===== 参加ステータス =====
+function getStatus(title){
+  const data = JSON.parse(localStorage.getItem("eventStatus") || "{}");
+  return data[title] || "";
+}
+
+function saveStatus(title,value){
+  const data = JSON.parse(localStorage.getItem("eventStatus") || "{}");
+  data[title] = value;
+  localStorage.setItem("eventStatus", JSON.stringify(data));
+}
   
 loadTodayContent();
 </script>
 
 </body>
 </html>
+
 
 
 
