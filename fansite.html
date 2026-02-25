@@ -668,6 +668,11 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
       <span>グッズ</span>
     </button>
 
+    <button onclick="showSection('mylist')">
+      <span class="material-symbols-outlined">bookmark</span>
+      <span>マイリスト</span>
+    </button>
+    
     <button onclick="showSection('member')">
       <span class="material-symbols-outlined">groups</span>
       <span>メンバー</span>
@@ -971,20 +976,6 @@ myEvents.push(title);
 localStorage.setItem("myEvents",JSON.stringify(myEvents));
 location.reload();
 }
-  
-function renderMyEvents(){
-if(!myEvents.length){
-myEventsDiv.innerHTML = `
-<p>
-まだ参加予定はありません。<br>
-イベントタブから追加できます。<br>
-詳細は上部タブの「Guide」をご覧ください。
-</p>
-`;
-return;
-}
-myEventsDiv.innerHTML=myEvents.map(e=>`<div class="card">${e}</div>`).join("");
-}
 
 const myEventsDiv=document.getElementById("myEvents");
 const todayBox=document.getElementById("todayBox");
@@ -1255,6 +1246,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
