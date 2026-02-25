@@ -653,12 +653,12 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
   <!-- 下段メインナビ -->
   <nav class="main-nav">
-    <button onclick="showSection('home')" class="active-tab">
+   <button onclick="showSection('home')" data-section="home" class="active-tab">
       <span class="material-symbols-outlined">home</span>
       <span>ホーム</span>
     </button>
 
-    <button onclick="showSection('event')">
+    <button onclick="showSection('event')" data-section="event">
       <span class="material-symbols-outlined">event</span>
       <span>イベント</span>
     </button>
@@ -668,12 +668,12 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
       <span>グッズ</span>
     </button>
 
-    <button onclick="showSection('mylist')">
+    <button onclick="showSection('mylist')" data-section="mylist">
       <span class="material-symbols-outlined">bookmark</span>
       <span>マイリスト</span>
     </button>
     
-    <button onclick="showSection('member')">
+    <button onclick="showSection('member')" data-section="member">
       <span class="material-symbols-outlined">groups</span>
       <span>メンバー</span>
     </button>
@@ -688,8 +688,6 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 <h2>最新イベント</h2>
 <div id="latestEvent"></div>
 
-<h3>あなたの参加予定イベント</h3>
-<div id="myEvents"></div>
 </div>
 
 <div id="event" class="section">
@@ -871,7 +869,9 @@ document.querySelectorAll('.main-nav button').forEach(btn=>{
 btn.classList.remove('active-tab');
 });
 
-const activeBtn = document.querySelector(`.main-nav button[onclick="showSection('${id}')"]`);
+const activeBtn = document.querySelector(
+  `.main-nav button[data-section="${id}"]`
+);
 if(activeBtn){
 activeBtn.classList.add('active-tab');
 }
@@ -1246,25 +1246,4 @@ loadTodayContent();
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
