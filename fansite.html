@@ -717,7 +717,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
 .latest-flex{
   display:flex;
-  gap:20px;
+  gap:24px;
   align-items:center;
   flex-wrap:wrap;
 }
@@ -729,6 +729,11 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
 .latest-meta{
   flex:1;
+}
+
+.latest-title{
+  margin-top:0;
+  margin-bottom:12px;
 }
 
 .meta-row{
@@ -759,7 +764,24 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   align-items:center;
   gap:6px;
 }
+
+.latest-wrapper{
+  background:white;
+  border-left:6px solid #e60023;
+  padding:24px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
   
+.latest-countdown{
+  font-size:22px;
+  font-weight:bold;
+  color:#e60023;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:20px;
+}
 </style>
 </head>
 
@@ -1250,15 +1272,19 @@ nearest=event;
 if(nearest){
 
   document.getElementById("latestEvent").innerHTML = `
-    <div class="event-card">
+    <div class="latest-wrapper">
 
-      <h3 class="event-title">${nearest.title}</h3>
+      <!-- カウントダウン -->
+      <div id="countdown" class="latest-countdown"></div>
 
+      <!-- イベントカード -->
       <div class="latest-flex">
 
         <img src="${nearest.image}" class="latest-thumb">
 
         <div class="latest-meta">
+
+          <h3 class="latest-title">${nearest.title}</h3>
 
           <p class="meta-row">
             <span class="material-symbols-outlined meta-icon">calendar_month</span>
@@ -1285,9 +1311,9 @@ if(nearest){
 
         </div>
       </div>
+
     </div>
   `;
-
   startCountdown(nearest.start_date);
 }
 
@@ -1553,6 +1579,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
