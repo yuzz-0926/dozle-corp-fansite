@@ -782,6 +782,15 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   gap:8px;
   margin-bottom:20px;
 }
+
+#endingSoonEvent .latest-wrapper{
+  border-left:6px solid #ff8800;
+}
+
+#endingSoonEvent .latest-countdown{
+  color:#ff8800;
+}
+  
 </style>
 </head>
 
@@ -871,6 +880,9 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
 <h2>最新イベント</h2>
 <div id="latestEvent"></div>
+
+<h2>終了間近イベント</h2>
+<div id="endingSoonEvent"></div>
 
 </div>
 
@@ -1193,7 +1205,18 @@ data.sort((a,b)=>new Date(b.start_date)-new Date(a.start_date));
 
 let nearest=null;
 let nearestTime=Infinity;
+let nearestEnd = null;
+let nearestEndTime = Infinity;
 
+data.forEach(event=>{
+  const end = new Date(event.end_date);
+  const endTime = end.getTime();
+
+  if(endTime > Date.now() && endTime < nearestEndTime){
+    nearestEndTime = endTime;
+    nearestEnd = event;
+  }
+});
 data.forEach(event=>{
 const start=new Date(event.start_date);
 const eventTime=start.getTime();
@@ -1317,6 +1340,52 @@ if(nearest){
   startCountdown(nearest.start_date);
 }
 
+if(nearestEnd){
+  document.getElementById("endingSoonEvent").innerHTML = `
+    <div class="latest-wrapper">
+
+      <div id="endingCountdown" class="latest-countdown"></div>
+
+      <div class="latest-flex">
+
+        <img src="${nearestEnd.image}" class="latest-thumb">
+
+        <div class="latest-meta">
+
+          <h3 class="latest-title">${nearestEnd.title}</h3>
+
+          <p class="meta-row">
+            <span class="material-symbols-outlined meta-icon">calendar_month</span>
+            ${
+              nearestEnd.start_date === nearestEnd.end_date
+                ? formatDate(nearestEnd.start_date)
+                : `${formatDate(nearestEnd.start_date)}〜${formatDate(nearestEnd.end_date)}`
+            }
+          </p>
+
+          <p class="meta-row">
+            <span class="material-symbols-outlined meta-icon">location_on</span>
+            ${nearestEnd.location}
+          </p>
+
+          <p class="meta-row">
+            <span class="material-symbols-outlined meta-icon">description</span>
+            ${nearestEnd.note || ""}
+          </p>
+
+          <p class="latest-note">
+            公式リンク・マイリスト追加はイベントページをご覧ください
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  startEndingCountdown(nearestEnd.end_date);
+}
+
 renderMyEvents();
 });
 
@@ -1436,6 +1505,33 @@ function startCountdown(eventDateStr){
   },1000);
 }
 
+function startEndingCountdown(endDate){
+
+  function update(){
+    const now = new Date().getTime();
+    const end = new Date(endDate).getTime();
+    const diff = end - now;
+
+    if(diff <= 0){
+      document.getElementById("endingCountdown").innerHTML =
+        "このイベントは終了しました";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const minutes = Math.floor((diff / (1000*60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("endingCountdown").innerHTML =
+      `<span class="material-symbols-outlined countdown-icon">timer</span>
+       あと ${days}日 ${hours}時間 ${minutes}分 ${seconds}秒 で終了！`;
+  }
+
+  update();
+  setInterval(update,1000);
+}
+  
 function getYouTubeThumbnail(url){
 
 if(!url) return "";
@@ -1579,6 +1675,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
