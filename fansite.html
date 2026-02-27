@@ -714,6 +714,51 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   margin-bottom:12px;
   box-shadow:0 4px 10px rgba(0,0,0,0.05);
 }
+
+.latest-flex{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.latest-thumb{
+  width:260px;
+  border-radius:16px;
+}
+
+.latest-meta{
+  flex:1;
+}
+
+.meta-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:6px 0;
+}
+
+.latest-note{
+  margin-top:14px;
+  font-size:13px;
+  color:#777;
+}
+  
+.countdown-icon{
+  font-size:22px;
+  vertical-align:middle;
+  margin-right:6px;
+  color:#e60023; /* カウントダウンと同じ赤 */
+}
+
+#countdown{
+  font-weight:bold;
+  font-size:22px;
+  color:#e60023;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
   
 </style>
 </head>
@@ -1205,31 +1250,42 @@ nearest=event;
 if(nearest){
 
   document.getElementById("latestEvent").innerHTML = `
+    <div class="event-card">
 
-    <div class="latest-event-wrapper">
+      <h3 class="event-title">${nearest.title}</h3>
 
-      <div id="countdown" class="event-countdown"></div>
+      <div class="latest-flex">
 
-      <div class="event-card">
+        <img src="${nearest.image}" class="latest-thumb">
 
-        <h3 class="event-title">${nearest.title}</h3>
+        <div class="latest-meta">
 
-        <div class="event-card-inner">
+          <p class="meta-row">
+            <span class="material-symbols-outlined meta-icon">calendar_month</span>
+            ${
+              nearest.start_date === nearest.end_date
+                ? formatDate(nearest.start_date)
+                : `${formatDate(nearest.start_date)}〜${formatDate(nearest.end_date)}`
+            }
+          </p>
 
-          <img src="${nearest.image}" class="event-thumb">
+          <p class="meta-row">
+            <span class="material-symbols-outlined meta-icon">location_on</span>
+            ${nearest.location}
+          </p>
 
-          <div class="event-meta">
-            <p>📅 ${formatDate(nearest.start_date)}</p>
-            <p>📍 ${nearest.location}</p>
-            <p>${nearest.note || ""}</p>
-          </div>
+          <p class="meta-row">
+            <span class="material-symbols-outlined meta-icon">description</span>
+            ${nearest.note || ""}
+          </p>
+
+          <p class="latest-note">
+            公式リンク・マイリスト追加はイベントページをご覧ください
+          </p>
 
         </div>
-
       </div>
-
     </div>
-
   `;
 
   startCountdown(nearest.start_date);
@@ -1348,7 +1404,8 @@ function startCountdown(eventDateStr){
     const seconds = Math.floor((diff % 60000) / 1000);
 
     document.getElementById("countdown").innerHTML =
-    `⏳ あと ${days}日 ${hours}時間 ${minutes}分 ${seconds}秒 で開催！`;
+      `<span class="material-symbols-outlined countdown-icon">timer</span>
+       あと ${days}日 ${hours}時間 ${minutes}分 ${seconds}秒 で開催！`;
 
   },1000);
 }
@@ -1496,6 +1553,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
