@@ -667,6 +667,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   border:1px solid #ccc;
   background:white;
   cursor:pointer;
+  height:38px;
 }
 
 .fav-btn.active{
@@ -676,8 +677,15 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
 .event-status{
-  padding:6px;
+  padding:8px 12px;      /* ← お気に入りと同じ余白 */
   border-radius:8px;
+  border:1px solid #ccc;
+  font-size:14px;
+  height:38px;           /* ← 高さを固定 */
+  box-sizing:border-box;
+  appearance:none;
+  background:white;
+  cursor:pointer;
 }
 
 @media(max-width:768px){
@@ -1473,6 +1481,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
