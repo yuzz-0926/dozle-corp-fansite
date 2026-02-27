@@ -1140,8 +1140,17 @@ eventList.innerHTML += `
     <p>${event.note || ""}</p>
 
     <div class="event-links">
-      ${event.link1 ? `<a href="${event.link1}" target="_blank" class="event-link-btn">特設サイト</a>` : ""}
-      ${event.link2 ? `<a href="${event.link2}" target="_blank" class="event-link-btn gray">公式サイト</a>` : ""}
+      ${event.link1 && event.link1.trim() !== "" ? 
+        `<a href="${event.link1.trim()}" target="_blank" class="event-link-btn">
+          特設サイト
+        </a>` 
+      : ""}
+
+      ${event.link2 && event.link2.trim() !== "" ? 
+        `<a href="${event.link2.trim()}" target="_blank" class="event-link-btn gray">
+          公式サイト
+        </a>` 
+      : ""}
     </div>
 
     <div class="event-actions">
@@ -1464,6 +1473,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
