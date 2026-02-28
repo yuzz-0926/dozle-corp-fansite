@@ -1158,7 +1158,42 @@ function formatDate(dateStr){
 const d=new Date(dateStr);
 return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
 }
+  
+function getGoodsStatus(start, end){
 
+  if(!start || !end) return "販売終了";
+
+  const now = new Date();
+  const startTime = new Date(start);
+  const endTime = new Date(end);
+
+  if(now < startTime){
+    return "販売前";
+  }
+
+  if(now >= startTime && now <= endTime){
+    return "販売中";
+  }
+
+  return "販売終了";
+}
+
+function formatGoodsDate(dateStr){
+
+  const date = new Date(dateStr);
+
+  const y = date.getFullYear();
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  const h = String(date.getHours()).padStart(2,"0");
+  const min = String(date.getMinutes()).padStart(2,"0");
+
+  const days = ["日","月","火","水","木","金","土"];
+  const week = days[date.getDay()];
+
+  return `${y}年${m}月${d}日(${week})${h}:${min}`;
+}
+  
 function loadTodayContent(){
 const category=Math.random()<0.5?"video":"word";
 if(category==="video"){
@@ -1278,41 +1313,6 @@ const dateText=event.start_date===event.end_date
 
 const joined=myEvents.includes(event.title);
 const btnText=joined?"参加予定✔":"参加予定にする";
-
-function getGoodsStatus(start, end){
-
-  if(!start || !end) return "販売終了";
-
-  const now = new Date();
-  const startTime = new Date(start);
-  const endTime = new Date(end);
-
-  if(now < startTime){
-    return "販売前";
-  }
-
-  if(now >= startTime && now <= endTime){
-    return "販売中";
-  }
-
-  return "販売終了";
-}
-
-function formatGoodsDate(dateStr){
-
-  const date = new Date(dateStr);
-
-  const y = date.getFullYear();
-  const m = date.getMonth() + 1;
-  const d = date.getDate();
-  const h = String(date.getHours()).padStart(2,"0");
-  const min = String(date.getMinutes()).padStart(2,"0");
-
-  const days = ["日","月","火","水","木","金","土"];
-  const week = days[date.getDay()];
-
-  return `${y}年${m}月${d}日(${week})${h}:${min}`;
-}
   
 eventList.innerHTML += `
 <div class="event-card-new">
@@ -1799,6 +1799,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
