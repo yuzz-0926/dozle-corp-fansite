@@ -1166,6 +1166,22 @@ function formatDate(dateStr){
 const d=new Date(dateStr);
 return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
 }
+
+function formatEventPeriod(start, end){
+
+  if(!end || end.trim() === ""){
+    // 終了日なし
+    return `${formatDate(start)}〜`;
+  }
+
+  if(start === end){
+    // 同日
+    return formatDate(start);
+  }
+
+  // 通常
+  return `${formatDate(start)}〜${formatDate(end)}`;
+}
   
 function getGoodsStatus(start, end){
 
@@ -1417,11 +1433,7 @@ if(nearest){
 
           <p class="meta-row">
             <span class="material-symbols-outlined meta-icon">calendar_month</span>
-            ${
-              nearest.start_date === nearest.end_date
-                ? formatDate(nearest.start_date)
-                : `${formatDate(nearest.start_date)}〜${formatDate(nearest.end_date)}`
-            }
+            ${formatEventPeriod(nearest.start_date, nearest.end_date)}
           </p>
 
           <p class="meta-row">
@@ -1462,13 +1474,7 @@ if(nearestEnd){
 
           <p class="meta-row">
             <span class="material-symbols-outlined meta-icon">calendar_month</span>
-            ${
-              !nearestEnd.end_date || nearestEnd.end_date.trim() === ""
-                ? `${formatDate(nearestEnd.start_date)}〜`
-                : nearestEnd.start_date === nearestEnd.end_date
-                  ? formatDate(nearestEnd.start_date)
-                  : `${formatDate(nearestEnd.start_date)}〜${formatDate(nearestEnd.end_date)}`
-            }
+            ${formatEventPeriod(nearestEnd.start_date, nearestEnd.end_date)}
           </p>
 
           <p class="meta-row">
@@ -1820,6 +1826,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
