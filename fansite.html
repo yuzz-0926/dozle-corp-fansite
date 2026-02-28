@@ -1212,14 +1212,31 @@ let nearestTime=Infinity;
 let nearestEnd = null;
 let nearestEndTime = Infinity;
 
+const today = new Date();
+const todayStr =
+  today.getFullYear() + "-" +
+  String(today.getMonth()+1).padStart(2,"0") + "-" +
+  String(today.getDate()).padStart(2,"0");
+
 data.forEach(event=>{
-  const end = new Date(event.end_date);
+
+  const endStr = event.end_date;
+  const end = new Date(endStr + "T00:00:00+09:00");
   const endTime = end.getTime();
 
+  // 🔴 今日終了なら最優先
+  if(endStr === todayStr){
+    nearestEnd = event;
+    nearestEndTime = 0;
+    return;
+  }
+
+  // 🟠 未来のイベントの中で一番近いもの
   if(endTime > Date.now() && endTime < nearestEndTime){
     nearestEndTime = endTime;
     nearestEnd = event;
   }
+
 });
 data.forEach(event=>{
 const start=new Date(event.start_date);
@@ -1699,6 +1716,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
