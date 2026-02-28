@@ -1512,24 +1512,43 @@ function startCountdown(eventDateStr){
 function startEndingCountdown(endDate){
 
   function update(){
-    const now = new Date().getTime();
-    const end = new Date(endDate).getTime();
-    const diff = end - now;
 
-    if(diff <= 0){
-      document.getElementById("endingCountdown").innerHTML =
-        "このイベントは終了しました";
+    const now = new Date();
+
+    // 終了日の0:00:00（日本時間）
+    const end = new Date(endDate + "T00:00:00+09:00");
+
+    const diff = end.getTime() - now.getTime();
+
+    const countdownEl = document.getElementById("endingCountdown");
+
+    // まだ終了日前
+    if(diff > 0){
+
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff / (1000*60*60)) % 24);
+      const minutes = Math.floor((diff / (1000*60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      countdownEl.innerHTML =
+        `<span class="material-symbols-outlined countdown-icon">timer</span>
+         あと ${days}日 ${hours}時間 ${minutes}分 ${seconds}秒 で終了！`;
+
       return;
     }
 
-    const days = Math.floor(diff / (1000*60*60*24));
-    const hours = Math.floor((diff / (1000*60*60)) % 24);
-    const minutes = Math.floor((diff / (1000*60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
+    // 終了日当日（3/30）
+    const endOfDay = new Date(endDate + "T23:59:59+09:00");
 
-    document.getElementById("endingCountdown").innerHTML =
-      `<span class="material-symbols-outlined countdown-icon">timer</span>
-       あと ${days}日 ${hours}時間 ${minutes}分 ${seconds}秒 で終了！`;
+    if(now <= endOfDay){
+      countdownEl.innerHTML =
+        `<span class="material-symbols-outlined countdown-icon">timer</span>
+         本日終了！`;
+      return;
+    }
+
+    // 翌日（3/31）になったらページ再読み込みして次のイベントへ
+    location.reload();
   }
 
   update();
@@ -1679,6 +1698,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
