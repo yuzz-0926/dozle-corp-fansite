@@ -1515,14 +1515,25 @@ function startEndingCountdown(endDate){
 
     const now = new Date();
 
-    // 終了日の0:00:00（日本時間）
-    const end = new Date(endDate + "T00:00:00+09:00");
-
-    const diff = end.getTime() - now.getTime();
+    const todayStr =
+      now.getFullYear() + "-" +
+      String(now.getMonth()+1).padStart(2,"0") + "-" +
+      String(now.getDate()).padStart(2,"0");
 
     const countdownEl = document.getElementById("endingCountdown");
 
-    // まだ終了日前
+    // 🔴 今日が終了日
+    if(todayStr === endDate){
+      countdownEl.innerHTML =
+        `<span class="material-symbols-outlined countdown-icon">timer</span>
+         本日終了！`;
+      return;
+    }
+
+    // 🟠 まだ終了日前
+    const end = new Date(endDate + "T00:00:00+09:00");
+    const diff = end.getTime() - now.getTime();
+
     if(diff > 0){
 
       const days = Math.floor(diff / (1000*60*60*24));
@@ -1537,17 +1548,7 @@ function startEndingCountdown(endDate){
       return;
     }
 
-    // 終了日当日（3/30）
-    const endOfDay = new Date(endDate + "T23:59:59+09:00");
-
-    if(now <= endOfDay){
-      countdownEl.innerHTML =
-        `<span class="material-symbols-outlined countdown-icon">timer</span>
-         本日終了！`;
-      return;
-    }
-
-    // 翌日（3/31）になったらページ再読み込みして次のイベントへ
+    // ⚫ 翌日になったら次のイベントへ
     location.reload();
   }
 
@@ -1698,6 +1699,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
