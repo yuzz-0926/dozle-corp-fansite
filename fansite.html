@@ -1321,12 +1321,6 @@ data.forEach(event=>{
 let nearestEnd = null;
 let nearestEndTime = Infinity;
 
-const today = new Date();
-const todayStr =
-  today.getFullYear() + "-" +
-  String(today.getMonth()+1).padStart(2,"0") + "-" +
-  String(today.getDate()).padStart(2,"0");
-
 data.forEach(event=>{
 
   const endStr = event.end_date;
@@ -1843,6 +1837,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
