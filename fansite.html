@@ -1297,8 +1297,27 @@ fetch(eventsURL).then(r=>r.text()).then(text=>{
 const data=parseCSV(text);
 data.sort((a,b)=>new Date(b.start_date)-new Date(a.start_date));
 
-let nearest=null;
-let nearestTime=Infinity;
+let nearest = null;
+let nearestTime = Infinity;
+
+// 🔥 日本時間の今日（YYYY-MM-DD）
+const todayStr = new Date().toLocaleDateString("sv-SE", {
+  timeZone: "Asia/Tokyo"
+});
+
+data.forEach(event=>{
+
+  const startStr = event.start_date; // 例: 2026-02-28
+  const startTime = new Date(startStr + "T00:00:00+09:00").getTime();
+
+  // 🔥 今日以降のイベントだけ対象
+  if(startStr >= todayStr && startTime < nearestTime){
+    nearestTime = startTime;
+    nearest = event;
+  }
+
+});
+  
 let nearestEnd = null;
 let nearestEndTime = Infinity;
 
@@ -1328,10 +1347,6 @@ data.forEach(event=>{
   }
 
 });
-data.forEach(event=>{
-const start=new Date(event.start_date);
-const eventTime=start.getTime();
-let dateText = "";
 
 if(!event.end_date || event.end_date.trim() === ""){
   // 終了日なし
@@ -1841,6 +1856,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
