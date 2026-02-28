@@ -1143,15 +1143,23 @@ const wordsURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlY
 const plannedURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvOlYuVa0P4wGG6piBpQ2ZwXzZxEPscII79uBByy9Z8_MDND2wouDZboQQon7XVVN4Gp/pub?gid=1152267879&single=true&output=csv";
 
 function parseCSV(text){
-const rows=text.trim().split("\n");
-const headers=rows.shift().split(",");
-return rows.map(row=>{
-const values=row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-return headers.reduce((obj,header,i)=>{
-obj[header.trim()]=values?values[i]?.replace(/^"|"$/g,""):"";
-return obj;
-},{});
-});
+
+  const rows = text.trim().split("\n");
+  const headers = rows.shift().split(",");
+
+  return rows.map(row=>{
+
+    const values = row.split(","); // ← シンプルにする
+
+    let obj = {};
+
+    headers.forEach((header,i)=>{
+      obj[header.trim()] = values[i] ? values[i].replace(/^"|"$/g,"") : "";
+    });
+
+    return obj;
+
+  });
 }
 
 function formatDate(dateStr){
@@ -1812,5 +1820,6 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
