@@ -1307,9 +1307,20 @@ data.forEach(event=>{
 data.forEach(event=>{
 const start=new Date(event.start_date);
 const eventTime=start.getTime();
-const dateText=event.start_date===event.end_date
-? formatDate(event.start_date)
-: `${formatDate(event.start_date)}〜${formatDate(event.end_date)}`;
+let dateText = "";
+
+if(!event.end_date || event.end_date.trim() === ""){
+  // 終了日なし
+  dateText = `${formatDate(event.start_date)}〜`;
+}
+else if(event.start_date === event.end_date){
+  // 同日開催
+  dateText = formatDate(event.start_date);
+}
+else{
+  // 通常の期間イベント
+  dateText = `${formatDate(event.start_date)}〜${formatDate(event.end_date)}`;
+}
 
 const joined=myEvents.includes(event.title);
 const btnText=joined?"参加予定✔":"参加予定にする";
@@ -1444,9 +1455,11 @@ if(nearestEnd){
           <p class="meta-row">
             <span class="material-symbols-outlined meta-icon">calendar_month</span>
             ${
-              nearestEnd.start_date === nearestEnd.end_date
-                ? formatDate(nearestEnd.start_date)
-                : `${formatDate(nearestEnd.start_date)}〜${formatDate(nearestEnd.end_date)}`
+              !nearestEnd.end_date || nearestEnd.end_date.trim() === ""
+                ? `${formatDate(nearestEnd.start_date)}〜`
+                : nearestEnd.start_date === nearestEnd.end_date
+                  ? formatDate(nearestEnd.start_date)
+                  : `${formatDate(nearestEnd.start_date)}〜${formatDate(nearestEnd.end_date)}`
             }
           </p>
 
@@ -1799,31 +1812,5 @@ loadTodayContent();
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
