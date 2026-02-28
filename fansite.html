@@ -15,7 +15,7 @@ body{
     radial-gradient(circle at 90% 80%, rgba(181,0,18,0.05), transparent 40%),
     linear-gradient(135deg, #f4f6f9 0%, #e9edf3 100%);
 
-  font-family: sans-ser;
+  font-family: sans-serif;
 }
   
 .logo{
@@ -44,7 +44,7 @@ z-index:1000;
 /* 上段 */
 .header-top{
 display:flex;
-justy-content:space-between;
+justify-content:space-between;
 align-items:center;
 padding:12px 20px;
 }
@@ -69,7 +69,7 @@ font-size:24px;
 /* 下段ナビ */
 .main-nav{
 display:flex;
-justy-content:space-around;
+justify-content:space-around;
 align-items:center;
 padding:10px 0;
 border-top:1px solid rgba(255,255,255,0.3);
@@ -266,7 +266,7 @@ display:block;
 }
 
 .main-nav{
-justy-content:space-around;
+justify-content:space-around;
 display:flex;
 }
 
@@ -314,7 +314,7 @@ box-shadow:0 6px 18px rgba(0,0,0,0.1);
 
 .planned-header{
 display:flex;
-justy-content:space-between;
+justify-content:space-between;
 align-items:center;
 }
 
@@ -1121,12 +1121,12 @@ function showSection(id){
     .forEach(btn => {
       btn.classList.remove('active-tab');
 
-      (btn.dataset.section === id){
+      if(btn.dataset.section === id){
         btn.classList.add('active-tab');
       }
     });
   
-  (id==="mylist"){
+  if(id==="mylist"){
   loadMyList();
   }
 }
@@ -1145,7 +1145,7 @@ const plannedURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQeScX6j_3nRvO
 function parseCSV(text){
 
   const rows = text.trim().split("\n");
-  const headers = rows.sht().split(",");
+  const headers = rows.shift().split(",");
 
   return rows.map(row=>{
 
@@ -1169,12 +1169,12 @@ return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
 
 function formatEventPeriod(start, end){
 
-  (!end || end.trim() === ""){
+  if(!end || end.trim() === ""){
     // 終了日なし
     return `${formatDate(start)}〜`;
   }
 
-  (start === end){
+  if(start === end){
     // 同日
     return formatDate(start);
   }
@@ -1185,17 +1185,17 @@ function formatEventPeriod(start, end){
   
 function getGoodsStatus(start, end){
 
-  (!start || !end) return "販売終了";
+  if(!start || !end) return "販売終了";
 
   const now = new Date();
   const startTime = new Date(start);
   const endTime = new Date(end);
 
-  (now < startTime){
+  if(now < startTime){
     return "販売前";
   }
 
-  (now >= startTime && now <= endTime){
+  if(now >= startTime && now <= endTime){
     return "販売中";
   }
 
@@ -1220,10 +1220,10 @@ function formatGoodsDate(dateStr){
   
 function loadTodayContent(){
 const category=Math.random()<0.5?"video":"word";
-(category==="video"){
+if(category==="video"){
 fetch(videosURL).then(r=>r.text()).then(text=>{
 const data=parseCSV(text);
-(!data.length)return;
+if(!data.length)return;
 const random=data[Math.floor(Math.random()*data.length)];
 const thumb = getYouTubeThumbnail(random.url);
 
@@ -1250,7 +1250,7 @@ todayBox.innerHTML =
 }else{
 fetch(wordsURL).then(r=>r.text()).then(text=>{
 const data=parseCSV(text);
-(!data.length)return;
+if(!data.length)return;
 const random=data[Math.floor(Math.random()*data.length)];
 const thumb = getYouTubeThumbnail(random.url);
 
@@ -1281,12 +1281,12 @@ todayBox.innerHTML =
 let myEvents=JSON.parse(localStorage.getItem("myEvents")||"[]");
 
 function toggleEvent(title){
-(myEvents.includes(title)){
+if(myEvents.includes(title)){
 myEvents=myEvents.filter(e=>e!==title);
 }else{
 myEvents.push(title);
 }
-localStorage.setItem("myEvents",JSON.stringy(myEvents));
+localStorage.setItem("myEvents",JSON.stringify(myEvents));
 location.reload();
 }
 
@@ -1324,7 +1324,7 @@ fetch(eventsURL).then(r=>r.text()).then(text=>{
     const startStr = event.start_date;
     const startTime = new Date(startStr + "T00:00:00+09:00").getTime();
 
-    (startStr >= todayStr && startTime < nearestTime){
+    if(startStr >= todayStr && startTime < nearestTime){
       nearestTime = startTime;
       nearest = event;
     }
@@ -1332,17 +1332,17 @@ fetch(eventsURL).then(r=>r.text()).then(text=>{
     /* =========================
        終了間近イベント判定
     ========================== */
-    (event.end_date && event.end_date.trim() !== ""){
+    if(event.end_date && event.end_date.trim() !== ""){
 
       const endStr = event.end_date;
       const endTime = new Date(endStr + "T00:00:00+09:00").getTime();
 
       // 今日終了なら最優先
-      (endStr === todayStr){
+      if(endStr === todayStr){
         nearestEnd = event;
         nearestEndTime = 0;
       }
-      else (endTime > Date.now() && endTime < nearestEndTime){
+      else if(endTime > Date.now() && endTime < nearestEndTime){
         nearestEndTime = endTime;
         nearestEnd = event;
       }
@@ -1420,7 +1420,7 @@ fetch(eventsURL).then(r=>r.text()).then(text=>{
   /* =========================
      最新イベント表示
   ========================== */
-  (nearest){
+  if(nearest){
 
     document.getElementById("latestEvent").innerHTML = `
       <div class="latest-wrapper">
@@ -1466,7 +1466,7 @@ fetch(eventsURL).then(r=>r.text()).then(text=>{
   /* =========================
      終了間近イベント表示
   ========================== */
-  (nearestEnd){
+  if(nearestEnd){
 
     document.getElementById("endingSoonEvent").innerHTML = `
       <div class="latest-wrapper">
@@ -1592,9 +1592,9 @@ const data=parseCSV(text);
 const box1 = document.getElementById("plannedFeatures");
 const box2 = document.getElementById("plannedFeaturesPage");
 
-(!data.length){
-(box1) box1.innerHTML="<p>現在検討中の機能はありません。</p>";
-(box2) box2.innerHTML="<p>現在検討中の機能はありません。</p>";
+if(!data.length){
+if(box1) box1.innerHTML="<p>現在検討中の機能はありません。</p>";
+if(box2) box2.innerHTML="<p>現在検討中の機能はありません。</p>";
 return;
 }
 
@@ -1610,8 +1610,8 @@ const html = `
 </div>
 `;
 
-(box1) box1.innerHTML += html;
-(box2) box2.innerHTML += html;
+if(box1) box1.innerHTML += html;
+if(box2) box2.innerHTML += html;
 
 });
 });
@@ -1630,7 +1630,7 @@ function startCountdown(eventDateStr){
     const eventStr = eventDateStr; // 例: "2026-02-28"
 
     // 🔥 今日が開催日なら
-    (todayStr === eventStr){
+    if(todayStr === eventStr){
       document.getElementById("countdown").innerHTML =
         `<span class="material-symbols-outlined countdown-icon">timer</span>
          本日開催！`;
@@ -1638,19 +1638,19 @@ function startCountdown(eventDateStr){
       return;
     }
 
-    const df = eventDate - now;
+    const diff = eventDate - now;
 
     // 🔥 開催日を過ぎたら何も表示しない
-    (df < 0){
+    if(diff < 0){
       document.getElementById("countdown").innerHTML = "";
       clearInterval(timer);
       return;
     }
 
-    const days = Math.floor(df / 86400000);
-    const hours = Math.floor((df % 86400000) / 3600000);
-    const minutes = Math.floor((df % 3600000) / 60000);
-    const seconds = Math.floor((df % 60000) / 1000);
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const minutes = Math.floor((diff % 3600000) / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
 
     document.getElementById("countdown").innerHTML =
       `<span class="material-symbols-outlined countdown-icon">timer</span>
@@ -1673,7 +1673,7 @@ function startEndingCountdown(endDate){
     const countdownEl = document.getElementById("endingCountdown");
 
     // 🔴 今日が終了日
-    (todayStr === endDate){
+    if(todayStr === endDate){
       countdownEl.innerHTML =
         `<span class="material-symbols-outlined countdown-icon">timer</span>
          本日終了！`;
@@ -1682,14 +1682,14 @@ function startEndingCountdown(endDate){
 
     // 🟠 まだ終了日前
     const end = new Date(endDate + "T00:00:00+09:00");
-    const df = end.getTime() - now.getTime();
+    const diff = end.getTime() - now.getTime();
 
-    (df > 0){
+    if(diff > 0){
 
-      const days = Math.floor(df / (1000*60*60*24));
-      const hours = Math.floor((df / (1000*60*60)) % 24);
-      const minutes = Math.floor((df / (1000*60)) % 60);
-      const seconds = Math.floor((df / 1000) % 60);
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff / (1000*60*60)) % 24);
+      const minutes = Math.floor((diff / (1000*60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
 
       countdownEl.innerHTML =
         `<span class="material-symbols-outlined countdown-icon">timer</span>
@@ -1708,21 +1708,21 @@ function startEndingCountdown(endDate){
   
 function getYouTubeThumbnail(url){
 
-(!url) return "";
+if(!url) return "";
 
 // 通常のwatch?v=形式
 let videoId = null;
 
-(url.includes("watch?v=")){
+if(url.includes("watch?v=")){
 videoId = url.split("watch?v=")[1].split("&")[0];
 }
 
 // youtu.be形式
-(url.includes("youtu.be/")){
+if(url.includes("youtu.be/")){
 videoId = url.split("youtu.be/")[1].split("?")[0];
 }
 
-(!videoId) return "";
+if(!videoId) return "";
 
 return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 }
@@ -1737,10 +1737,10 @@ event.target.classList.add("active");
 const cards = document.querySelectorAll(".planned-card");
 
 cards.forEach(card=>{
-(status==="all"){
+if(status==="all"){
 card.style.display="block";
 }else{
-(card.dataset.status===status){
+if(card.dataset.status===status){
 card.style.display="block";
 }else{
 card.style.display="none";
@@ -1762,13 +1762,13 @@ function isFav(title){
 function toggleFavorite(title){
   let favs = getFavorites();
 
-  (favs.includes(title)){
+  if(favs.includes(title)){
     favs = favs.filter(t=>t!==title);
   }else{
     favs.push(title);
   }
 
-  localStorage.setItem("favorites", JSON.stringy(favs));
+  localStorage.setItem("favorites", JSON.stringify(favs));
   location.reload();
 }
 
@@ -1782,7 +1782,7 @@ function getStatus(title){
 function saveStatus(title,value){
   const data = JSON.parse(localStorage.getItem("eventStatus") || "{}");
   data[title] = value;
-  localStorage.setItem("eventStatus", JSON.stringy(data));
+  localStorage.setItem("eventStatus", JSON.stringify(data));
 }
 
 function loadMyList(filter="all"){
@@ -1801,10 +1801,10 @@ function loadMyList(filter="all"){
       const isFavorite = favs.includes(event.title);
       const status = statusData[event.title] || "";
 
-      (status==="済") countParticipated++;
+      if(status==="済") countParticipated++;
 
       // フィルター判定
-      (
+      if(
         filter==="fav" && !isFavorite ||
         filter==="予定" && status!=="予定" ||
         filter==="済" && status!=="済"
@@ -1812,8 +1812,8 @@ function loadMyList(filter="all"){
         return;
       }
 
-      (filter!=="all" && filter!=="fav" && filter!==status){
-        (filter!=="fav") return;
+      if(filter!=="all" && filter!=="fav" && filter!==status){
+        if(filter!=="fav") return;
       }
 
       html+=`
@@ -1849,9 +1849,6 @@ loadTodayContent();
 
 </body>
 </html>
-
-
-
 
 
 
