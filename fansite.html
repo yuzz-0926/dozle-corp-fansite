@@ -794,6 +794,37 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 #latestEvent .countdown-icon{
   color:#ff8800;
 }
+
+.goods-meta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin:6px 0;
+  font-size:14px;
+}
+
+.goods-series-status{
+  display:inline-block;
+  margin-top:10px;
+  padding:6px 12px;
+  border-radius:8px;
+  font-weight:bold;
+}
+
+.status-販売前{
+  background:#ccc;
+  color:white;
+}
+
+.status-販売中{
+  background:#00a000;
+  color:white;
+}
+
+.status-販売終了{
+  background:#666;
+  color:white;
+}
   
 </style>
 </head>
@@ -1248,6 +1279,39 @@ const dateText=event.start_date===event.end_date
 const joined=myEvents.includes(event.title);
 const btnText=joined?"参加予定✔":"参加予定にする";
 
+function getGoodsStatus(start, end){
+
+  const now = new Date();
+  const startTime = new Date(start);
+  const endTime = new Date(end);
+
+  if(now < startTime){
+    return "販売前";
+  }
+
+  if(now >= startTime && now <= endTime){
+    return "販売中";
+  }
+
+  return "販売終了";
+}
+
+function formatGoodsDate(dateStr){
+
+  const date = new Date(dateStr);
+
+  const y = date.getFullYear();
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  const h = String(date.getHours()).padStart(2,"0");
+  const min = String(date.getMinutes()).padStart(2,"0");
+
+  const days = ["日","月","火","水","木","金","土"];
+  const week = days[date.getDay()];
+
+  return `${y}年${m}月${d}日(${week})${h}:${min}`;
+}
+  
 eventList.innerHTML += `
 <div class="event-card-new">
 
@@ -1413,18 +1477,24 @@ renderMyEvents();
 fetch(goodsURL)
   .then(res => res.text())
   .then(text => {
+
     const data = parseCSV(text);
-    // 販売中を上に並べる
-    data.sort((a, b) => {
-      if (a.status === "販売中" && b.status !== "販売中") return -1;
-      if (a.status !== "販売中" && b.status === "販売中") return 1;
-      return 0;
+
+    // 🔥 ステータスを自動判定して追加
+    data.forEach(item=>{
+      item.autoStatus = getGoodsStatus(item.start_datetime, item.end_datetime);
     });
+
+    // 🔥 並び替え（販売中 → 販売前 → 販売終了）
+    const order = { "販売中":0, "販売前":1, "販売終了":2 };
+    data.sort((a,b)=> order[a.autoStatus] - order[b.autoStatus]);
+
     let html = "";
 
     data.forEach(item => {
 
-      const isActive = item.status === "販売中";
+      const status = item.autoStatus;
+      const isActive = status === "販売中";
 
       html += `
         <div class="goods-series-card">
@@ -1439,12 +1509,23 @@ fetch(goodsURL)
               ${item.series}
             </h3>
 
-            <p class="goods-series-description">
+            <p class="goods-meta">
+              <span class="material-symbols-outlined">schedule</span>
+              ${formatGoodsDate(item.start_datetime)}〜${formatGoodsDate(item.end_datetime)}
+            </p>
+
+            <p class="goods-meta">
+              <span class="material-symbols-outlined">store</span>
+              ${item.site_name || ""}
+            </p>
+
+            <p class="goods-meta">
+              <span class="material-symbols-outlined">description</span>
               ${item.description || ""}
             </p>
 
-            <p class="goods-series-status ${isActive ? "active" : "ended"}">
-              ${isActive ? "🟢 販売中" : "⚫ 販売終了"}
+            <p class="goods-series-status status-${status}">
+              ${status}
             </p>
 
             <div class="goods-buttons">
@@ -1716,6 +1797,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
