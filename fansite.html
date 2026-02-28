@@ -1616,11 +1616,26 @@ function startCountdown(eventDateStr){
   const timer = setInterval(()=>{
 
     const now = new Date();
+
+    // 🔥 日本時間で今日の日付を取得
+    const todayStr = now.toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
+    const eventStr = eventDateStr; // 例: "2026-02-28"
+
+    // 🔥 今日が開催日なら
+    if(todayStr === eventStr){
+      document.getElementById("countdown").innerHTML =
+        `<span class="material-symbols-outlined countdown-icon">timer</span>
+         本日開催！`;
+      clearInterval(timer);
+      return;
+    }
+
     const diff = eventDate - now;
 
-    if(diff <= 0){
-      document.getElementById("countdown").innerHTML = "🔥 本日開催！";
-      clearInterval(timer); // ← ここ追加
+    // 🔥 開催日を過ぎたら何も表示しない
+    if(diff < 0){
+      document.getElementById("countdown").innerHTML = "";
+      clearInterval(timer);
       return;
     }
 
@@ -1826,6 +1841,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
