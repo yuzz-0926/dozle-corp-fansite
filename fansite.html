@@ -920,6 +920,59 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   color:white;
   border:none;
 }
+
+/* ===== スマホ対応 ===== */
+@media screen and (max-width: 768px){
+
+  .filter-wrapper{
+    overflow-x:auto;       /* 横スクロール可能 */
+    gap:8px;
+    padding-bottom:5px;
+  }
+
+  .filter-wrapper::-webkit-scrollbar{
+    height:6px;
+  }
+
+  .filter-wrapper::-webkit-scrollbar-thumb{
+    background:#ccc;
+    border-radius:10px;
+  }
+
+  .filter-btn{
+    flex:0 0 auto;   /* 幅固定して折り返さない */
+    font-size:14px;
+    padding:6px 14px;
+  }
+
+}
+
+@media screen and (max-width: 768px){
+
+  .mylist-flex{
+    flex-direction:column;   /* 縦並び */
+    align-items:center;
+  }
+
+  .mylist-thumb{
+    width:100%;
+    max-width:300px;
+  }
+
+  .mylist-meta{
+    width:100%;
+  }
+
+  .mylist-title{
+    margin-top:15px;
+    text-align:left;
+  }
+  
+  .mylist-card-new{
+    padding:15px;
+  }
+  
+}
   
 </style>
 </head>
@@ -1987,6 +2040,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
