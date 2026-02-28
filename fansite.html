@@ -1348,19 +1348,6 @@ data.forEach(event=>{
 
 });
 
-if(!event.end_date || event.end_date.trim() === ""){
-  // 終了日なし
-  dateText = `${formatDate(event.start_date)}〜`;
-}
-else if(event.start_date === event.end_date){
-  // 同日開催
-  dateText = formatDate(event.start_date);
-}
-else{
-  // 通常の期間イベント
-  dateText = `${formatDate(event.start_date)}〜${formatDate(event.end_date)}`;
-}
-
 const joined=myEvents.includes(event.title);
 const btnText=joined?"参加予定✔":"参加予定にする";
   
@@ -1856,6 +1843,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
