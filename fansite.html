@@ -1281,6 +1281,8 @@ const btnText=joined?"参加予定✔":"参加予定にする";
 
 function getGoodsStatus(start, end){
 
+  if(!start || !end) return "販売終了";
+
   const now = new Date();
   const startTime = new Date(start);
   const endTime = new Date(end);
@@ -1471,7 +1473,7 @@ if(nearestEnd){
   startEndingCountdown(nearestEnd.end_date);
 }
 
-renderMyEvents();
+// renderMyEvents();
 });
 
 fetch(goodsURL)
@@ -1797,6 +1799,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
