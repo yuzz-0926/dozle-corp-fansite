@@ -676,12 +676,14 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   background:white;
   cursor:pointer;
   height:38px;
+  transform: none !important;
 }
 
 .fav-btn.active{
   background:#ff4d6d;
   color:white;
   border:none;
+  transform: none !important;
 }
 
 .event-status{
@@ -1803,23 +1805,37 @@ function loadMyList(filter="all"){
 
       if(status==="済") countParticipated++;
 
-      // フィルター判定
-      if(
-        filter==="fav" && !isFavorite ||
-        filter==="予定" && status!=="予定" ||
-        filter==="済" && status!=="済"
-      ){
-        return;
+      let show = false;
+
+      // ===== フィルター判定 =====
+
+      if(filter==="all"){
+        // ⭐ or 予定 or 済 のどれか
+        if(isFavorite || status==="予定" || status==="済"){
+          show = true;
+        }
       }
 
-      if(filter!=="all" && filter!=="fav" && filter!==status){
-        if(filter!=="fav") return;
+      else if(filter==="fav"){
+        show = isFavorite;
       }
+
+      else if(filter==="予定"){
+        show = status==="予定";
+      }
+
+      else if(filter==="済"){
+        show = status==="済";
+      }
+
+      if(!show) return;
+
+      // ===== 表示 =====
 
       html+=`
         <div class="mylist-card">
           <h3>${event.title}</h3>
-          <p>📅 ${event.start_date}</p>
+          <p>📅 ${formatEventPeriod(event.start_date, event.end_date)}</p>
           <p>📍 ${event.location}</p>
           ${isFavorite ? "<p>❤️ お気に入り</p>" : ""}
           ${status ? `<p>ステータス：${status}</p>` : ""}
@@ -1827,7 +1843,9 @@ function loadMyList(filter="all"){
       `;
     });
 
-    document.getElementById("mylist-container").innerHTML=html || "<p>該当イベントなし</p>";
+    document.getElementById("mylist-container").innerHTML=
+      html || "<p>該当イベントなし</p>";
+
     document.getElementById("mylist-count").innerText=
       `これまで参加したイベント：${countParticipated}件`;
 
@@ -1849,6 +1867,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
