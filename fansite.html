@@ -1294,209 +1294,221 @@ const myEventsDiv=document.getElementById("myEvents");
 const todayBox=document.getElementById("todayBox");
 
 fetch(eventsURL).then(r=>r.text()).then(text=>{
-const data=parseCSV(text);
-data.sort((a,b)=>new Date(b.start_date)-new Date(a.start_date));
 
-let nearest = null;
-let nearestTime = Infinity;
+  const data = parseCSV(text);
+  data.sort((a,b)=>new Date(b.start_date) - new Date(a.start_date));
 
-// 🔥 日本時間の今日（YYYY-MM-DD）
-const todayStr = new Date().toLocaleDateString("sv-SE", {
-  timeZone: "Asia/Tokyo"
-});
+  let nearest = null;
+  let nearestTime = Infinity;
 
-data.forEach(event=>{
+  let nearestEnd = null;
+  let nearestEndTime = Infinity;
 
-  const startStr = event.start_date; // 例: 2026-02-28
-  const startTime = new Date(startStr + "T00:00:00+09:00").getTime();
+  // 日本時間の今日（YYYY-MM-DD）
+  const todayStr = new Date().toLocaleDateString("sv-SE", {
+    timeZone: "Asia/Tokyo"
+  });
 
-  // 🔥 今日以降のイベントだけ対象
-  if(startStr >= todayStr && startTime < nearestTime){
-    nearestTime = startTime;
-    nearest = event;
-  }
+  let eventHTML = "";
 
-});
-  
-let nearestEnd = null;
-let nearestEndTime = Infinity;
+  data.forEach(event=>{
 
-data.forEach(event=>{
+    /* =========================
+       日付表示テキスト作成
+    ========================== */
+    let dateText = formatEventPeriod(event.start_date, event.end_date);
 
-  const endStr = event.end_date;
-  const end = new Date(endStr + "T00:00:00+09:00");
-  const endTime = end.getTime();
+    /* =========================
+       最新イベント判定
+    ========================== */
+    const startStr = event.start_date;
+    const startTime = new Date(startStr + "T00:00:00+09:00").getTime();
 
-  // 🔴 今日終了なら最優先
-  if(endStr === todayStr){
-    nearestEnd = event;
-    nearestEndTime = 0;
-    return;
-  }
+    if(startStr >= todayStr && startTime < nearestTime){
+      nearestTime = startTime;
+      nearest = event;
+    }
 
-  // 🟠 未来のイベントの中で一番近いもの
-  if(endTime > Date.now() && endTime < nearestEndTime){
-    nearestEndTime = endTime;
-    nearestEnd = event;
-  }
+    /* =========================
+       終了間近イベント判定
+    ========================== */
+    if(event.end_date && event.end_date.trim() !== ""){
 
-});
+      const endStr = event.end_date;
+      const endTime = new Date(endStr + "T00:00:00+09:00").getTime();
 
-const joined=myEvents.includes(event.title);
-const btnText=joined?"参加予定✔":"参加予定にする";
-  
-eventList.innerHTML += `
-<div class="event-card-new">
+      // 今日終了なら最優先
+      if(endStr === todayStr){
+        nearestEnd = event;
+        nearestEndTime = 0;
+      }
+      else if(endTime > Date.now() && endTime < nearestEndTime){
+        nearestEndTime = endTime;
+        nearestEnd = event;
+      }
+    }
 
-  <div class="event-img-box">
-    <img src="${event.image}" class="event-img-new">
-  </div>
+    /* =========================
+       イベント一覧カード生成
+    ========================== */
 
-  <div class="event-info">
+    eventHTML += `
+    <div class="event-card-new">
 
-    <h3 class="event-title">${event.title}</h3>
-
-    <p class="event-meta">
-      <span class="material-symbols-outlined meta-icon">calendar_month</span>
-      ${dateText}
-    </p>
-
-    <p class="event-meta">
-      <span class="material-symbols-outlined meta-icon">location_on</span>
-      ${event.location}
-    </p>
-
-    <p class="event-meta">
-      <span class="material-symbols-outlined meta-icon">description</span>
-      ${event.note || ""}
-    </p>
-    <div class="event-links">
-      ${event.link1 && event.link1.trim() !== "" ? 
-        `<a href="${event.link1.trim()}" target="_blank" class="event-link-btn">
-          特設サイト
-        </a>` 
-      : ""}
-
-      ${event.link2 && event.link2.trim() !== "" ? 
-        `<a href="${event.link2.trim()}" target="_blank" class="event-link-btn gray">
-          公式サイト
-        </a>` 
-      : ""}
-    </div>
-
-    <div class="event-actions">
-
-      <button class="fav-btn ${isFav(event.title) ? 'active' : ''}"
-        onclick="toggleFavorite('${event.title}')">
-        ♡ お気に入り
-      </button>
-
-      <select class="event-status"
-        onchange="saveStatus('${event.title}', this.value)">
-        <option value="">選択しない</option>
-        <option value="予定" ${getStatus(event.title)==="予定"?"selected":""}>参加予定</option>
-        <option value="済" ${getStatus(event.title)==="済"?"selected":""}>参加済</option>
-      </select>
-
-    </div>
-
-  </div>
-</div>
-`;
-
-if(eventTime>Date.now()&&eventTime<nearestTime){
-nearestTime=eventTime;
-nearest=event;
-}
-});
-
-if(nearest){
-
-  document.getElementById("latestEvent").innerHTML = `
-    <div class="latest-wrapper">
-
-      <!-- カウントダウン -->
-      <div id="countdown" class="latest-countdown"></div>
-
-      <!-- イベントカード -->
-      <div class="latest-flex">
-
-        <img src="${nearest.image}" class="latest-thumb">
-
-        <div class="latest-meta">
-
-          <h3 class="latest-title">${nearest.title}</h3>
-
-          <p class="meta-row">
-            <span class="material-symbols-outlined meta-icon">calendar_month</span>
-            ${formatEventPeriod(nearest.start_date, nearest.end_date)}
-          </p>
-
-          <p class="meta-row">
-            <span class="material-symbols-outlined meta-icon">location_on</span>
-            ${nearest.location}
-          </p>
-
-          <p class="meta-row">
-            <span class="material-symbols-outlined meta-icon">description</span>
-            ${nearest.note || ""}
-          </p>
-
-          <p class="latest-note">
-            公式リンク・マイリスト追加はイベントページをご覧ください
-          </p>
-
-        </div>
+      <div class="event-img-box">
+        <img src="${event.image}" class="event-img-new">
       </div>
 
-    </div>
-  `;
-  startCountdown(nearest.start_date);
-}
+      <div class="event-info">
 
-if(nearestEnd){
-  document.getElementById("endingSoonEvent").innerHTML = `
-    <div class="latest-wrapper">
+        <h3 class="event-title">${event.title}</h3>
 
-      <div id="endingCountdown" class="latest-countdown"></div>
+        <p class="event-meta">
+          <span class="material-symbols-outlined meta-icon">calendar_month</span>
+          ${dateText}
+        </p>
 
-      <div class="latest-flex">
+        <p class="event-meta">
+          <span class="material-symbols-outlined meta-icon">location_on</span>
+          ${event.location}
+        </p>
 
-        <img src="${nearestEnd.image}" class="latest-thumb">
+        <p class="event-meta">
+          <span class="material-symbols-outlined meta-icon">description</span>
+          ${event.note || ""}
+        </p>
 
-        <div class="latest-meta">
+        <div class="event-links">
+          ${event.link1 && event.link1.trim() !== "" ? 
+            `<a href="${event.link1.trim()}" target="_blank" class="event-link-btn">
+              特設サイト
+            </a>` 
+          : ""}
 
-          <h3 class="latest-title">${nearestEnd.title}</h3>
+          ${event.link2 && event.link2.trim() !== "" ? 
+            `<a href="${event.link2.trim()}" target="_blank" class="event-link-btn gray">
+              公式サイト
+            </a>` 
+          : ""}
+        </div>
 
-          <p class="meta-row">
-            <span class="material-symbols-outlined meta-icon">calendar_month</span>
-            ${formatEventPeriod(nearestEnd.start_date, nearestEnd.end_date)}
-          </p>
+        <div class="event-actions">
 
-          <p class="meta-row">
-            <span class="material-symbols-outlined meta-icon">location_on</span>
-            ${nearestEnd.location}
-          </p>
+          <button class="fav-btn ${isFav(event.title) ? 'active' : ''}"
+            onclick="toggleFavorite('${event.title}')">
+            ♡ お気に入り
+          </button>
 
-          <p class="meta-row">
-            <span class="material-symbols-outlined meta-icon">description</span>
-            ${nearestEnd.note || ""}
-          </p>
-
-          <p class="latest-note">
-            公式リンク・マイリスト追加はイベントページをご覧ください
-          </p>
+          <select class="event-status"
+            onchange="saveStatus('${event.title}', this.value)">
+            <option value="">選択しない</option>
+            <option value="予定" ${getStatus(event.title)==="予定"?"selected":""}>参加予定</option>
+            <option value="済" ${getStatus(event.title)==="済"?"selected":""}>参加済</option>
+          </select>
 
         </div>
+
       </div>
-
     </div>
-  `;
+    `;
 
-  startEndingCountdown(nearestEnd.end_date);
-}
+  });
 
-// renderMyEvents();
+  // 一覧表示
+  document.getElementById("eventList").innerHTML = eventHTML;
+
+  /* =========================
+     最新イベント表示
+  ========================== */
+  if(nearest){
+
+    document.getElementById("latestEvent").innerHTML = `
+      <div class="latest-wrapper">
+
+        <div id="countdown" class="latest-countdown"></div>
+
+        <div class="latest-flex">
+
+          <img src="${nearest.image}" class="latest-thumb">
+
+          <div class="latest-meta">
+
+            <h3 class="latest-title">${nearest.title}</h3>
+
+            <p class="meta-row">
+              <span class="material-symbols-outlined meta-icon">calendar_month</span>
+              ${formatEventPeriod(nearest.start_date, nearest.end_date)}
+            </p>
+
+            <p class="meta-row">
+              <span class="material-symbols-outlined meta-icon">location_on</span>
+              ${nearest.location}
+            </p>
+
+            <p class="meta-row">
+              <span class="material-symbols-outlined meta-icon">description</span>
+              ${nearest.note || ""}
+            </p>
+
+            <p class="latest-note">
+              公式リンク・マイリスト追加はイベントページをご覧ください
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+    `;
+
+    startCountdown(nearest.start_date);
+  }
+
+  /* =========================
+     終了間近イベント表示
+  ========================== */
+  if(nearestEnd){
+
+    document.getElementById("endingSoonEvent").innerHTML = `
+      <div class="latest-wrapper">
+
+        <div id="endingCountdown" class="latest-countdown"></div>
+
+        <div class="latest-flex">
+
+          <img src="${nearestEnd.image}" class="latest-thumb">
+
+          <div class="latest-meta">
+
+            <h3 class="latest-title">${nearestEnd.title}</h3>
+
+            <p class="meta-row">
+              <span class="material-symbols-outlined meta-icon">calendar_month</span>
+              ${formatEventPeriod(nearestEnd.start_date, nearestEnd.end_date)}
+            </p>
+
+            <p class="meta-row">
+              <span class="material-symbols-outlined meta-icon">location_on</span>
+              ${nearestEnd.location}
+            </p>
+
+            <p class="meta-row">
+              <span class="material-symbols-outlined meta-icon">description</span>
+              ${nearestEnd.note || ""}
+            </p>
+
+            <p class="latest-note">
+              公式リンク・マイリスト追加はイベントページをご覧ください
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+    `;
+
+    startEndingCountdown(nearestEnd.end_date);
+  }
+
 });
 
 fetch(goodsURL)
@@ -1837,6 +1849,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
