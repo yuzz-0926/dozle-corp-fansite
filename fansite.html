@@ -1207,6 +1207,19 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   display:flex;
   align-items:center;
 }
+
+.section-title-img{
+  width:100%;
+  margin:20px 0;
+  text-align:center;
+}
+
+.section-title-img img{
+  max-width:100%;
+  height:auto;
+  display:block;
+  margin:0 auto;
+}
   
 </style>
 </head>
@@ -1642,7 +1655,12 @@ const random=data[Math.floor(Math.random()*data.length)];
 const thumb = getYouTubeThumbnail(random.url);
 
 todayBox.innerHTML =
-`<h3 class="random-heading">🌟 ランダムドズル社データ【動画】</h3>
+`
+<div class="section-title-img">
+  <img src="random-video-title.png" 
+       alt="ランダムドズル社データ【動画】">
+</div>
+`;
 
 <div class="random-card">
 
@@ -1669,8 +1687,13 @@ const random=data[Math.floor(Math.random()*data.length)];
 const thumb = getYouTubeThumbnail(random.url);
 
 todayBox.innerHTML =
-`<h3 class="random-heading">🌟 ランダムドズル社データ【用語】</h3>
-
+`
+<div class="section-title-img">
+  <img src="random-word-title.png" 
+       alt="ランダムドズル社データ【用語】">
+</div>
+`;
+  
 <div class="random-card">
 
   ${thumb ? `
@@ -2362,6 +2385,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
