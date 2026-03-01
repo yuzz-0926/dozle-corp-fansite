@@ -236,7 +236,26 @@ border:none;
 color:white;
 cursor:pointer;
 }
+  
+.hamburger{
+  background:none;
+  border:none;
+  outline:none;
+  box-shadow:none;
+  -webkit-tap-highlight-color: transparent;
+}
 
+.hamburger:focus,
+.hamburger:active,
+.hamburger:focus-visible{
+  outline:none;
+  box-shadow:none;
+}
+
+button{
+  -webkit-tap-highlight-color: transparent;
+}
+  
 .hamburger .material-symbols-outlined{
 font-size:28px;
 }
@@ -2343,6 +2362,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
