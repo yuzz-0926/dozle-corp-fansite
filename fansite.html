@@ -1049,6 +1049,88 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   display:block;
   margin:0;          /* autoを消す */
 }
+
+/* ===== ニュース全体 ===== */
+.news-section-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:16px;
+}
+
+/* ===== カード ===== */
+.news-card{
+  background:#fff;
+  border-left:4px solid #d60000;
+  padding:16px;
+  margin-bottom:16px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* 上部ヘッダー */
+.news-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.news-icon{
+  font-size:18px;
+  color:#d60000;
+}
+
+.news-date{
+  color:#666;
+}
+
+/* NEWバッジ */
+.news-badge{
+  background:#d60000;
+  color:#fff;
+  font-size:11px;
+  padding:2px 6px;
+  border-radius:4px;
+  font-weight:bold;
+}
+
+/* タイトル */
+.news-title{
+  font-size:16px;
+  margin:6px 0;
+  font-weight:600;
+}
+
+/* 本文 */
+.news-content{
+  font-size:14px;
+  color:#444;
+  margin-bottom:8px;
+  line-height:1.6;
+}
+
+/* リンク */
+.news-link{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-size:14px;
+  color:#000;
+  text-decoration:none;
+  font-weight:500;
+}
+
+.news-link:hover{
+  text-decoration:underline;
+}
+
+.link-icon{
+  font-size:18px;
+}
   
 </style>
 </head>
@@ -1138,6 +1220,8 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 <div class="main-inner">
 
 <div id="home" class="section active">
+
+<div id="newsBox"></div>
 <div id="todayBox" class="card"></div>
 
 <h2>最新イベント</h2>
@@ -2165,7 +2249,96 @@ document.querySelectorAll("#sidebar button").forEach(btn=>{
 
   });
 });
-  
+
+function loadNews(){
+
+  fetch(newsURL).then(r=>r.text()).then(text=>{
+
+    const data = parseCSV(text);
+    if(!data.length) return;
+
+    const todayStr = new Date().toLocaleDateString("sv-SE", {
+      timeZone: "Asia/Tokyo"
+    });
+
+    let html = "";
+    let hasNews = false;
+
+    data.forEach(news=>{
+
+      if(!news.start_date) return;
+
+      const start = news.start_date;
+      const end = news.end_date || "9999-12-31";
+
+      if(start <= todayStr && todayStr <= end){
+
+        hasNews = true;
+
+        const isNew = (start === todayStr);
+
+        html += `
+        <div class="news-card">
+
+          <div class="news-header">
+
+            <span class="material-symbols-outlined news-icon">
+              feed
+            </span>
+
+            <span class="news-date">
+              ${start}
+            </span>
+
+            ${isNew ? `
+              <span class="news-badge">
+                NEW
+              </span>
+            ` : ""}
+
+          </div>
+
+          <h3 class="news-title">
+            ${news.title}
+          </h3>
+
+          <p class="news-content">
+            ${news.content}
+          </p>
+
+          ${news.link && news.link.trim() !== "" ? `
+            <a href="${news.link}" target="_blank" class="news-link">
+              <span class="material-symbols-outlined link-icon">
+                open_in_new
+              </span>
+              詳しく見る
+            </a>
+          ` : ""}
+
+        </div>
+        `;
+      }
+
+    });
+
+    if(hasNews){
+      document.getElementById("newsBox").innerHTML = `
+        <div class="news-section-title">
+          <span class="material-symbols-outlined">
+            campaign
+          </span>
+          お知らせ
+        </div>
+        ${html}
+      `;
+    }else{
+      document.getElementById("newsBox").innerHTML = "";
+    }
+
+  });
+}
+
+loadNews();
 loadTodayContent();
 </script>
 
@@ -2174,6 +2347,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
