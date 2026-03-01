@@ -1084,6 +1084,35 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
     display:block;
   }
 
+.sidebar button{
+  width:100%;
+  padding:14px 18px;
+  border:none;
+  background:white;
+  color:black;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.sidebar button:hover{
+  background:#f5f5f5;
+}
+
+/* 🔥 選択中 */
+.sidebar button.active-tab{
+  background:#d90000;
+  color:white;
+  font-weight:bold;
+  border-left:5px solid black;
+}
+
+.sidebar button.active-tab .material-symbols-outlined{
+  color:white;
+}
+  
 }
   
 </style>
@@ -1154,7 +1183,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
       <nav class="sidebar-nav">
 
-        <button onclick="showSection('home');closeSidebarMobile()" data-section="home" class="active-tab">
+        <button onclick="showSection('home');closeSidebarMobile()" data-section="home">
           <span class="material-symbols-outlined">home</span>
           <span>ホーム</span>
         </button>
@@ -1181,17 +1210,17 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
         <hr>
 
-        <button onclick="showSection('guide');closeSidebarMobile()">
+        <button onclick="showSection('guide');closeSidebarMobile()" data-section="guide">
           <span class="material-symbols-outlined">help</span>
           <span>使い方</span>
         </button>
 
-        <button onclick="showSection('contact');closeSidebarMobile()">
+        <button onclick="showSection('contact');closeSidebarMobile()" data-section="contact">
           <span class="material-symbols-outlined">mail</span>
           <span>お問い合わせ</span>
         </button>
 
-        <button onclick="showSection('planned');closeSidebarMobile()">
+        <button onclick="showSection('planned');closeSidebarMobile()" data-section="planned">
           <span class="material-symbols-outlined">build</span>
           <span>現在検討中の機能</span>
         </button>
@@ -1426,6 +1455,25 @@ function showSection(id){
   
   if(id==="mylist"){
   loadMyList();
+  }
+
+  // セクション切替
+  document.querySelectorAll('.section').forEach(section=>{
+    section.classList.remove('active');
+  });
+  document.getElementById(sectionId).classList.add('active');
+
+  // 🔥 サイドバーのactive切替
+  document.querySelectorAll('.sidebar button').forEach(btn=>{
+    btn.classList.remove('active-tab');
+  });
+
+  const activeBtn = document.querySelector(
+    `.sidebar button[data-section="${sectionId}"]`
+  );
+
+  if(activeBtn){
+    activeBtn.classList.add('active-tab');
   }
 }
   
@@ -2211,6 +2259,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
