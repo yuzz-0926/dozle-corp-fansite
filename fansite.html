@@ -997,8 +997,9 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   background:white;
   border-left:2px solid #d90000;
   padding:20px 0;
-  transition:0.3s ease;
   z-index:900;
+  transform:translateX(0);
+  transition:transform 0.3s ease;
 }
 
 .sidebar-inner{
@@ -1047,6 +1048,11 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   width:100%;
   padding:0px;
   margin-top:64px;
+  transition:margin 0.3s ease;
+}
+
+#mainContent.expanded{
+  margin-right:0;
 }
 
 /* ===== スマホ ===== */
@@ -1129,6 +1135,10 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   }
 }
 
+.sidebar.collapsed{
+  transform:translateX(100%);
+}
+  
 /* PC：開いている状態 */
 .sidebar.closed{
   transform:translateX(100%);
@@ -2241,17 +2251,16 @@ function filterMyList(type){
 }
 
 function toggleSidebar(){
-  document.getElementById("sidebar").classList.toggle("collapsed");
-}
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+  const isMobile = window.innerWidth <= 768;
 
-function openSidebarMobile(){
-  document.getElementById("sidebar").classList.add("open");
-  document.getElementById("sidebarOverlay").classList.add("active");
-}
-
-function closeSidebarMobile(){
-  document.getElementById("sidebar").classList.remove("open");
-  document.getElementById("sidebarOverlay").classList.remove("active");
+  if(isMobile){
+    sidebar.classList.toggle("open");
+    overlay.classList.toggle("active");
+  }else{
+    sidebar.classList.toggle("collapsed");
+  }
 }
   
 loadTodayContent();
@@ -2262,6 +2271,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
