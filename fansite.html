@@ -1172,6 +1172,16 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   outline:none;
   box-shadow:none;
 }
+
+.site-title img{
+  height:40px;
+  cursor:pointer;
+}
+
+.site-title{
+  display:flex;
+  align-items:center;
+}
   
 </style>
 </head>
@@ -1182,9 +1192,8 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
   <!-- 上段 -->
   <div class="header-top">
-    <div class="logo">
-      <img src="icon2.png" class="site-icon">
-      <span>ドズル社データベース</span>
+    <div class="site-title" onclick="showSection('home')">
+      <img src="title-logo.png" alt="サイトタイトル">
     </div>
 
     <!-- スマホ・パソコン両方ハンバーガー -->
@@ -1275,7 +1284,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   </aside>
 
 <!-- オーバーレイ（スマホ用） -->
-<div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebarMobile()"></div>
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <!-- ===== メインエリア ===== -->
 <main id="mainContent">
@@ -1483,13 +1492,12 @@ window.addEventListener("DOMContentLoaded", function(){
   
 function showSection(sectionId){
 
-  // セクション切替
   document.querySelectorAll('.section').forEach(section=>{
     section.classList.remove('active');
   });
+
   document.getElementById(sectionId).classList.add('active');
 
-  // サイドバーactive切替
   document.querySelectorAll('.sidebar button').forEach(btn=>{
     btn.classList.remove('active-tab');
   });
@@ -1502,8 +1510,12 @@ function showSection(sectionId){
     activeBtn.classList.add('active-tab');
   }
 
-  // 🔥 mylist用処理
-  if(sectionId === "mylist"){
+  // 🔥 スマホなら閉じる
+  if(window.innerWidth <= 768){
+    closeSidebar();
+  }
+
+  if(sectionId==="mylist"){
     loadMyList();
   }
 }
@@ -2294,6 +2306,28 @@ function toggleSidebar(){
     }
   }
 }
+
+function closeSidebar(){
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebarOverlay").classList.remove("active");
+  document.getElementById("menuIcon").textContent = "menu";
+}
+  
+document.querySelectorAll("#sidebar button").forEach(btn=>{
+  btn.addEventListener("click", function(){
+
+    const isMobile = window.innerWidth <= 768;
+
+    if(isMobile){
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("sidebarOverlay").classList.remove("active");
+
+      // ハンバーガーを戻す
+      document.getElementById("menuIcon").textContent = "menu";
+    }
+
+  });
+});
   
 loadTodayContent();
 </script>
@@ -2303,4 +2337,5 @@ loadTodayContent();
 
 </body>
 </html>
+
 
