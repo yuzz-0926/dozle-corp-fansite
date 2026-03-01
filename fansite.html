@@ -991,11 +991,11 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 .sidebar{
   position:fixed;
   top:64px; /* ヘッダー高さ */
-  left:0;
+  right:0;
   width:240px;
   height:calc(100vh - 64px);
   background:white;
-  border-right:2px solid #d90000;
+  border-left:2px solid #d90000;
   padding:20px 0;
   transition:0.3s ease;
   z-index:900;
@@ -1043,7 +1043,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
 /* メイン余白 */
 #mainContent{
-  margin-left:240px;
+  margin-right:240px;
   width:100%;
   padding:0px;
   margin-top:64px;
@@ -1057,17 +1057,12 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 @media(max-width:768px){
 
   .sidebar{
-    transform:translateX(-100%);
     top:64px;   /* ← ここを修正 */
     height:100vh;
   }
 
-  .sidebar.open{
-    transform:translateX(0);
-  }
-
   #mainContent{
-    margin-left:0;
+    margin-right:0;
     margin-top:64px;
     padding:0px;
   }
@@ -1106,7 +1101,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   background:#d90000;
   color:white;
   font-weight:bold;
-  border-left:5px solid black;
+  border-right:5px solid black;
 }
 
 .sidebar button.active-tab .material-symbols-outlined{
@@ -1133,6 +1128,22 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
     padding:12px;
   }
 }
+
+/* PC：開いている状態 */
+.sidebar.closed{
+  transform:translateX(100%);
+}
+
+/* スマホ：最初は閉じる */
+@media(max-width:768px){
+  .sidebar{
+    transform:translateX(100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+}
   
 </style>
 </head>
@@ -1148,21 +1159,8 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
       <span>ドズル社データベース</span>
     </div>
 
-    <!-- PC用アイコン -->
-    <div class="header-icons desktop-only">
-      <button onclick="showSection('guide')">
-        <span class="material-symbols-outlined">help</span>
-      </button>
-      <button onclick="showSection('contact')">
-        <span class="material-symbols-outlined">mail</span>
-      </button>
-      <button onclick="showSection('planned')">
-        <span class="material-symbols-outlined">build</span>
-      </button>
-    </div>
-
-    <!-- スマホ用ハンバーガー -->
-    <button class="hamburger mobile-only" onclick="openSidebarMobile()">
+    <!-- スマホ・パソコン両方ハンバーガー -->
+    <button class="hamburger" onclick="toggleSidebar()">
       <span class="material-symbols-outlined">menu</span>
     </button>
   </div>
@@ -2264,6 +2262,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
