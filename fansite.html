@@ -1654,13 +1654,11 @@ if(!data.length)return;
 const random=data[Math.floor(Math.random()*data.length)];
 const thumb = getYouTubeThumbnail(random.url);
 
-todayBox.innerHTML =
-`
+todayBox.innerHTML = `
 <div class="section-title-img">
   <img src="random-video-title.png" 
        alt="ランダムドズル社データ【動画】">
 </div>
-`;
 
 <div class="random-card">
 
@@ -1677,7 +1675,8 @@ todayBox.innerHTML =
     : ""}
   </div>
 
-</div>`;
+</div>
+`;
 });
 }else{
 fetch(wordsURL).then(r=>r.text()).then(text=>{
@@ -1686,14 +1685,12 @@ if(!data.length)return;
 const random=data[Math.floor(Math.random()*data.length)];
 const thumb = getYouTubeThumbnail(random.url);
 
-todayBox.innerHTML =
-`
+todayBox.innerHTML = `
 <div class="section-title-img">
   <img src="random-word-title.png" 
        alt="ランダムドズル社データ【用語】">
 </div>
-`;
-  
+
 <div class="random-card">
 
   ${thumb ? `
@@ -1710,7 +1707,8 @@ todayBox.innerHTML =
     : ""}
   </div>
 
-</div>`;
+</div>
+`;
 });
 }
 }
@@ -2385,6 +2383,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
