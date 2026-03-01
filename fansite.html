@@ -973,6 +973,108 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   }
   
 }
+
+/* ===== レイアウト ===== */
+.layout{
+  display:flex;
+}
+
+.sidebar{
+  position:fixed;
+  top:140px; /* ヘッダー高さ */
+  left:0;
+  width:240px;
+  height:calc(100vh - 140px);
+  background:white;
+  border-right:2px solid #d90000;
+  padding:20px 0;
+  transition:0.3s ease;
+  z-index:900;
+}
+
+.sidebar-inner{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+
+.sidebar-nav{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.sidebar-nav button{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 20px;
+  border:none;
+  background:white;
+  color:black;
+  cursor:pointer;
+  font-size:14px;
+  text-align:left;
+  transition:0.2s;
+}
+
+.sidebar-nav button:hover{
+  background:#f5f5f5;
+}
+
+.sidebar-nav button.active-tab{
+  background:#d90000;
+  color:white;
+  font-weight:bold;
+}
+
+.sidebar-nav .material-symbols-outlined{
+  font-size:20px;
+}
+
+/* メイン余白 */
+#mainContent{
+  margin-left:240px;
+  width:100%;
+  padding:20px;
+  margin-top:140px;
+}
+
+/* ===== スマホ ===== */
+.sidebar-overlay{
+  display:none;
+}
+
+@media(max-width:768px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    top:0;
+    height:100vh;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  #mainContent{
+    margin-left:0;
+    margin-top:140px;
+  }
+
+  .sidebar-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    z-index:800;
+  }
+
+  .sidebar-overlay.active{
+    display:block;
+  }
+
+}
   
 </style>
 </head>
@@ -1002,7 +1104,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
     </div>
 
     <!-- スマホ用ハンバーガー -->
-    <button class="hamburger mobile-only" onclick="toggleMenu()">
+    <button class="hamburger mobile-only" onclick="openSidebarMobile()">
       <span class="material-symbols-outlined">menu</span>
     </button>
   </div>
@@ -1027,35 +1129,73 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
   </div>
 
-  <!-- 下段メインナビ -->
-  <nav class="main-nav">
-   <button onclick="showSection('home')" data-section="home" class="active-tab">
-      <span class="material-symbols-outlined">home</span>
-      <span>ホーム</span>
-    </button>
-
-    <button onclick="showSection('event')" data-section="event">
-      <span class="material-symbols-outlined">event</span>
-      <span>イベント</span>
-    </button>
-
-    <button onclick="showSection('goods')" data-section="goods">
-      <span class="material-symbols-outlined">shopping_bag</span>
-      <span>グッズ</span>
-    </button>
-
-    <button onclick="showSection('mylist')" data-section="mylist">
-      <span class="material-symbols-outlined">bookmark</span>
-      <span>マイリスト</span>
-    </button>
-    
-    <button onclick="showSection('about')" data-section="about">
-      <span class="material-symbols-outlined">menu_book</span>
-      <span>ドズル社</span>
-    </button>
-  </nav>
-
 </header>
+
+<div class="layout">
+
+  <!-- ===== サイドバー ===== -->
+  <aside id="sidebar" class="sidebar">
+
+    <div class="sidebar-inner">
+
+      <button class="sidebar-toggle desktop-only" onclick="toggleSidebar()">
+        <span class="material-symbols-outlined">menu_open</span>
+      </button>
+
+      <nav class="sidebar-nav">
+
+        <button onclick="showSection('home');closeSidebarMobile()" data-section="home" class="active-tab">
+          <span class="material-symbols-outlined">home</span>
+          <span>ホーム</span>
+        </button>
+
+        <button onclick="showSection('event');closeSidebarMobile()" data-section="event">
+          <span class="material-symbols-outlined">event</span>
+          <span>イベント</span>
+        </button>
+
+        <button onclick="showSection('goods');closeSidebarMobile()" data-section="goods">
+          <span class="material-symbols-outlined">shopping_bag</span>
+          <span>グッズ</span>
+        </button>
+
+        <button onclick="showSection('mylist');closeSidebarMobile()" data-section="mylist">
+          <span class="material-symbols-outlined">bookmark</span>
+          <span>マイリスト</span>
+        </button>
+
+        <button onclick="showSection('about');closeSidebarMobile()" data-section="about">
+          <span class="material-symbols-outlined">menu_book</span>
+          <span>ドズル社</span>
+        </button>
+
+        <hr>
+
+        <button onclick="showSection('guide');closeSidebarMobile()">
+          <span class="material-symbols-outlined">help</span>
+          <span>使い方</span>
+        </button>
+
+        <button onclick="showSection('contact');closeSidebarMobile()">
+          <span class="material-symbols-outlined">mail</span>
+          <span>お問い合わせ</span>
+        </button>
+
+        <button onclick="showSection('planned');closeSidebarMobile()">
+          <span class="material-symbols-outlined">build</span>
+          <span>現在検討中の機能</span>
+        </button>
+
+      </nav>
+    </div>
+  </aside>
+
+  <!-- オーバーレイ（スマホ用） -->
+  <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebarMobile()"></div>
+
+  <!-- ===== メインエリア ===== -->
+  <main id="mainContent">
+  
 <main>
 
 <div id="home" class="section active">
@@ -2038,12 +2178,30 @@ function filterMyList(type){
 
   loadMyList(type);
 }
+
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("collapsed");
+}
+
+function openSidebarMobile(){
+  document.getElementById("sidebar").classList.add("open");
+  document.getElementById("sidebarOverlay").classList.add("active");
+}
+
+function closeSidebarMobile(){
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebarOverlay").classList.remove("active");
+}
   
 loadTodayContent();
 </script>
 
+</main>
+</div>
+
 </body>
 </html>
+
 
 
 
