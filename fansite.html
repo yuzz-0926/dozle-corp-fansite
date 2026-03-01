@@ -1107,15 +1107,22 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   box-shadow:0 2px 6px rgba(0,0,0,0.08);
 }
 
-/* サムネ */
+/* ===== サムネボックス ===== */
 .random-thumb-box{
+  width:100%;
+  max-width:420px;   /* サイズ調整ここ */
+  aspect-ratio:16/9; /* 強制16:9 */
+  overflow:hidden;
+  border-radius:6px;
   margin-bottom:12px;
 }
 
+/* 画像本体 */
 .random-thumb{
   width:100%;
-  max-width:480px;
-  border-radius:6px;
+  height:100%;
+  object-fit:cover;  /* ← 重要：黒帯消える */
+  display:block;
 }
 
 /* タイトル */
@@ -1238,7 +1245,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 <div id="home" class="section active">
 
 <div id="newsBox"></div>
-<div id="todayBox" class="card"></div>
+<div id="todayBox"></div>
 
 <h2>最新イベント</h2>
 <div id="latestEvent"></div>
@@ -2387,6 +2394,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
