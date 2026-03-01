@@ -1026,10 +1026,6 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   font-size:14px;
   text-align:left;
   transition:0.2s;
-  background:none;
-  border:none;
-  outline:none;
-  box-shadow:none;
 }
 
 .sidebar-nav button:hover{
@@ -1059,6 +1055,10 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   margin-right:0;
 }
 
+.sidebar.collapsed ~ #mainContent{
+  margin-right:0;
+}
+  
 /* ===== スマホ ===== */
 .sidebar-overlay{
   display:none;
@@ -2257,13 +2257,27 @@ function filterMyList(type){
 function toggleSidebar(){
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("sidebarOverlay");
+  const icon = document.getElementById("menuIcon");
   const isMobile = window.innerWidth <= 768;
 
   if(isMobile){
     sidebar.classList.toggle("open");
     overlay.classList.toggle("active");
+
+    if(sidebar.classList.contains("open")){
+      icon.textContent = "close";
+    }else{
+      icon.textContent = "menu";
+    }
+
   }else{
     sidebar.classList.toggle("collapsed");
+
+    if(sidebar.classList.contains("collapsed")){
+      icon.textContent = "menu";
+    }else{
+      icon.textContent = "close";
+    }
   }
 }
   
@@ -2275,21 +2289,3 @@ loadTodayContent();
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
