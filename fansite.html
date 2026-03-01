@@ -39,14 +39,16 @@ width:100%;
 background:#d90000;
 color:white;
 z-index:1000;
+height:64px;   /* ← 追加 */
 }
 
 /* 上段 */
 .header-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:12px 20px;
+  height:64px;     /* ← 追加 */
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;  /* ← 縦padding削除 */
 }
 
 .logo{
@@ -980,10 +982,10 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
 .sidebar{
   position:fixed;
-  top:140px; /* ヘッダー高さ */
+  top:64px; /* ヘッダー高さ */
   left:0;
   width:240px;
-  height:calc(100vh - 140px);
+  height:calc(100vh - 64px);
   background:white;
   border-right:2px solid #d90000;
   padding:20px 0;
@@ -1048,7 +1050,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
   .sidebar{
     transform:translateX(-100%);
-    top:140px;   /* ← ここを修正 */
+    top:64px;   /* ← ここを修正 */
     height:100vh;
   }
 
@@ -1058,7 +1060,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
   #mainContent{
     margin-left:0;
-    margin-top:140px;
+    margin-top:64px;
   }
 
   .sidebar-overlay{
@@ -2200,6 +2202,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
