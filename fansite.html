@@ -1633,6 +1633,8 @@ function loadTodayContent(){
 
       const random = data[Math.floor(Math.random()*data.length)];
 
+      const thumb = random.url ? getYouTubeThumbnail(random.url) : null;
+
       todayBox.innerHTML = `
 
         <div class="random-section-title">
@@ -1644,18 +1646,31 @@ function loadTodayContent(){
 
         <div class="random-card ${thumb ? "" : "no-image"}">
 
-          <div class="random-content">
-            <p class="random-title">${random.word}</p>
-            <p class="random-description">${random.description}</p>
+          ${thumb ? `
+            <div class="random-thumb-box">
+              <img src="${thumb}" class="random-thumb">
+            </div>
+          ` : ""}
 
-            ${random.url && random.url.trim() !== "" ?
-              `<a href="${random.url}" target="_blank" class="random-link">
+          <div class="random-content">
+
+            <p class="random-title">${random.word}</p>
+
+            ${random.description ? `
+              <p class="random-description">
+                ${random.description}
+              </p>
+            ` : ""}
+
+            ${random.url && random.url.trim() !== "" ? `
+              <a href="${random.url}" target="_blank" class="random-link">
                 <span class="material-symbols-outlined link-icon">
                   open_in_new
                 </span>
                 関連動画を見る
-              </a>`
-            : ""}
+              </a>
+            ` : ""}
+
           </div>
 
         </div>
@@ -2419,6 +2434,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
