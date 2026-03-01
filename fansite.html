@@ -1442,7 +1442,7 @@ function showSection(sectionId){
   });
   document.getElementById(sectionId).classList.add('active');
 
-  // 🔥 サイドバーのactive切替
+  // サイドバーactive切替
   document.querySelectorAll('.sidebar button').forEach(btn=>{
     btn.classList.remove('active-tab');
   });
@@ -1454,9 +1454,10 @@ function showSection(sectionId){
   if(activeBtn){
     activeBtn.classList.add('active-tab');
   }
-  
-  if(data-section==="mylist"){
-  loadMyList();
+
+  // 🔥 mylist用処理
+  if(sectionId === "mylist"){
+    loadMyList();
   }
 }
   
@@ -2242,6 +2243,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
