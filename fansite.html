@@ -1478,24 +1478,28 @@ fetch(eventsURL).then(r=>r.text()).then(text=>{
     }
 
     /* =========================
-       終了間近イベント判定
+       終了間近イベント判定（開催中のみ）
     ========================== */
     if(event.end_date && event.end_date.trim() !== ""){
 
-      const endStr = event.end_date;
-      const endTime = new Date(endStr + "T00:00:00+09:00").getTime();
+      const startStr = event.start_date;
+      const endStr   = event.end_date;
 
-      // 今日終了なら最優先
-      if(endStr === todayStr){
-        nearestEnd = event;
-        nearestEndTime = 0;
-      }
-      else if(endTime > Date.now() && endTime < nearestEndTime){
+      const startTime = new Date(startStr + "T00:00:00+09:00").getTime();
+      const endTime   = new Date(endStr   + "T23:59:59+09:00").getTime();
+      const now       = Date.now();
+
+      // ✅ 開催中のみ対象
+      const isOngoing = startTime <= now && endTime >= now;
+
+      if(!isOngoing) return;
+
+      // ✅ 一番終了が近いものを選ぶ
+      if(endTime < nearestEndTime){
         nearestEndTime = endTime;
         nearestEnd = event;
       }
     }
-
     /* =========================
        イベント一覧カード生成
     ========================== */
@@ -2040,6 +2044,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
