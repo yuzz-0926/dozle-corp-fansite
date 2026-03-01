@@ -1158,6 +1158,20 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
     transform:translateX(0);
   }
 }
+
+.sidebar button{
+  background:none;
+  border:none;
+  box-shadow:none;
+  outline:none;
+}
+
+.sidebar button:focus,
+.sidebar button:focus-visible,
+.sidebar button:active{
+  outline:none;
+  box-shadow:none;
+}
   
 </style>
 </head>
@@ -1175,7 +1189,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
     <!-- スマホ・パソコン両方ハンバーガー -->
     <button class="hamburger" onclick="toggleSidebar()">
-      <span class="material-symbols-outlined">menu</span>
+      <span id="menuIcon" class="material-symbols-outlined">menu</span>
     </button>
   </div>
 
@@ -2289,3 +2303,4 @@ loadTodayContent();
 
 </body>
 </html>
+
