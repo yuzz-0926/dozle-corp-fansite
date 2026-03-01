@@ -1434,28 +1434,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 </footer>
 
 <script>
-function showSection(id){
-
-  // セクション切り替え
-  document.querySelectorAll('.section')
-    .forEach(s => s.classList.remove('active'));
-
-  document.getElementById(id)
-    .classList.add('active');
-
-  // タブのアクティブ切り替え
-  document.querySelectorAll('.main-nav button')
-    .forEach(btn => {
-      btn.classList.remove('active-tab');
-
-      if(btn.dataset.section === id){
-        btn.classList.add('active-tab');
-      }
-    });
-  
-  if(id==="mylist"){
-  loadMyList();
-  }
+function showSection(sectionId){
 
   // セクション切替
   document.querySelectorAll('.section').forEach(section=>{
@@ -1474,6 +1453,10 @@ function showSection(id){
 
   if(activeBtn){
     activeBtn.classList.add('active-tab');
+  }
+  
+  if(data-section==="mylist"){
+  loadMyList();
   }
 }
   
@@ -2259,6 +2242,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
