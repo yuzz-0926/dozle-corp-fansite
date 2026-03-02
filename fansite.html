@@ -1209,6 +1209,43 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 .sale-now { color:#00a000; font-weight:bold; }
 .sale-before { color:#0066cc; }
 .sale-end { color:#666; }
+
+.mylist-card{
+  display:flex;
+  gap:16px;
+  padding:16px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  margin-bottom:16px;
+  background:#fff;
+}
+
+.mylist-img-box{
+  width:140px;
+  aspect-ratio:1/1;
+  overflow:hidden;
+  border-radius:6px;
+}
+
+.mylist-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.mylist-info{
+  flex:1;
+}
+
+@media(max-width:768px){
+  .mylist-card{
+    flex-direction:column;
+  }
+
+  .mylist-img-box{
+    width:100%;
+  }
+}
   
 </style>
 </head>
@@ -2374,6 +2411,11 @@ function loadGoodsMyList(filter="all"){
         item.end_datetime
       );
 
+      const statusClass =
+        saleStatus === "販売中" ? "sale-now" :
+        saleStatus === "販売前" ? "sale-before" :
+        "sale-end";
+
       if(status==="済") countPurchased++;
 
       // フィルター
@@ -2393,49 +2435,47 @@ function loadGoodsMyList(filter="all"){
       html+=`
       <div class="mylist-card">
 
-        <h3 class="mylist-title">${title}</h3>
+        <div class="mylist-img-box">
+          <img src="${item.image}" class="mylist-img">
+        </div>
 
-        <p class="meta-row">
-          <span class="material-symbols-outlined meta-icon">
-            schedule
-          </span>
-          ${item.start_datetime || ""} 〜 ${item.end_datetime || ""}
-        </p>
+        <div class="mylist-info">
 
-        <p class="meta-row">
-          <span class="material-symbols-outlined meta-icon">
-            store
-          </span>
-          ${item.site_name || ""}
-        </p>
+          <h3 class="mylist-title">${title}</h3>
 
-        <p class="meta-row">
-          <span class="material-symbols-outlined meta-icon">
-            description
-          </span>
-          ${item.description || ""}
-        </p>
-
-        <p class="meta-row">
-          <span class="material-symbols-outlined meta-icon">
-            sell
-          </span>
-          販売状態：${saleStatus}
-        </p>
-
-        <p class="latest-note">
-          公式リンク・マイリスト追加はイベントページをご覧ください
-        </p>
-
-        ${isFavorite ? `
-          <p class="fav-mark">♡ お気に入り</p>
-        ` : ""}
-
-        ${status ? `
-          <p class="status-mark">
-            ステータス：${status==="予定"?"購入予定":"購入済"}
+          <p class="meta-row">
+            <span class="material-symbols-outlined meta-icon">schedule</span>
+            ${item.start_datetime || ""} 〜 ${item.end_datetime || ""}
           </p>
-        ` : ""}
+
+          <p class="meta-row">
+            <span class="material-symbols-outlined meta-icon">store</span>
+            ${item.site_name || ""}
+          </p>
+
+          <p class="meta-row">
+            <span class="material-symbols-outlined meta-icon">description</span>
+            ${item.description || ""}
+          </p>
+
+          <p class="meta-row ${statusClass}">
+            <span class="material-symbols-outlined meta-icon">sell</span>
+            販売状態：${saleStatus}
+          </p>
+
+          <p class="latest-note">
+            公式リンク・マイリスト追加はイベントページをご覧ください
+          </p>
+
+          ${isFavorite ? `<p class="fav-mark">♡ お気に入り</p>` : ""}
+
+          ${status ? `
+            <p class="status-mark">
+              ステータス：${status==="予定"?"購入予定":"購入済"}
+            </p>
+          ` : ""}
+
+        </div>
 
       </div>
       `;
@@ -2675,6 +2715,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
