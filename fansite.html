@@ -1220,6 +1220,10 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   background:#e60000;
   color:#fff;
 }
+
+.sale-now { color:#e60000; font-weight:bold; }
+.sale-before { color:#0066cc; }
+.sale-end { color:#999; }
   
 </style>
 </head>
@@ -1982,6 +1986,10 @@ fetch(goodsURL)
     data.forEach(item => {
 
       const status = item.autoStatus;
+      const statusClass =
+        status === "販売中" ? "sale-now" :
+        status === "販売前" ? "sale-before" :
+        "sale-end";
 
       html += `
       <div class="event-card-new">
@@ -2007,6 +2015,11 @@ fetch(goodsURL)
           <p class="event-meta">
             <span class="material-symbols-outlined meta-icon">description</span>
             ${item.description || ""}
+          </p>
+
+          <p class="event-meta ${statusClass}">
+            <span class="material-symbols-outlined meta-icon">sell</span>
+            販売状態：${status}
           </p>
 
           <div class="event-links">
@@ -2355,21 +2368,30 @@ function loadGoodsMyList(filter="all"){
 
   fetch(goodsURL).then(r=>r.text()).then(text=>{
 
-    const data=parseCSV(text);
+    const data = parseCSV(text);
 
     const favs = getGoodsFavorites();
     const statusData = JSON.parse(localStorage.getItem("goodsStatus") || "{}");
 
-    let html="";
-    let countPurchased=0;
+    let html = "";
+    let countPurchased = 0;
 
     data.forEach(item=>{
 
-      const isFavorite = favs.includes(item.title);
-      const status = statusData[item.title] || "";
+      const title = item.series; // ← 統一！
+
+      const isFavorite = favs.includes(title);
+      const status = statusData[title] || "";
+
+      // 🔥 販売状態自動判定
+      const saleStatus = getGoodsSaleStatus(
+        item.start_datetime,
+        item.end_datetime
+      );
 
       if(status==="済") countPurchased++;
 
+      // フィルター
       if(
         filter==="fav" && !isFavorite ||
         filter==="予定" && status!=="予定" ||
@@ -2378,6 +2400,7 @@ function loadGoodsMyList(filter="all"){
         return;
       }
 
+      // 「すべて」はお気に入り or ステータスあるもののみ
       if(filter==="all" && !isFavorite && !status){
         return;
       }
@@ -2385,56 +2408,49 @@ function loadGoodsMyList(filter="all"){
       html+=`
       <div class="mylist-card">
 
-        <div class="mylist-info">
+        <h3 class="mylist-title">${title}</h3>
 
-          <h3 class="mylist-title">
-            ${item.title}
-          </h3>
+        <p class="meta-row">
+          <span class="material-symbols-outlined meta-icon">
+            schedule
+          </span>
+          ${item.start_datetime || ""} 〜 ${item.end_datetime || ""}
+        </p>
 
-          ${item.schedule ? `
-            <p class="meta-row">
-              <span class="material-symbols-outlined meta-icon">
-                schedule
-              </span>
-              ${item.schedule}
-            </p>
-          ` : ""}
+        <p class="meta-row">
+          <span class="material-symbols-outlined meta-icon">
+            store
+          </span>
+          ${item.site_name || ""}
+        </p>
 
-          ${item.store ? `
-            <p class="meta-row">
-              <span class="material-symbols-outlined meta-icon">
-                store
-              </span>
-              ${item.store}
-            </p>
-          ` : ""}
+        <p class="meta-row">
+          <span class="material-symbols-outlined meta-icon">
+            description
+          </span>
+          ${item.description || ""}
+        </p>
 
-          ${item.description ? `
-            <p class="meta-row">
-              <span class="material-symbols-outlined meta-icon">
-                description
-              </span>
-              ${item.description}
-            </p>
-          ` : ""}
+        <p class="meta-row">
+          <span class="material-symbols-outlined meta-icon">
+            sell
+          </span>
+          販売状態：${saleStatus}
+        </p>
 
-          <p class="latest-note">
-            公式リンク・マイリスト追加はイベントページをご覧ください
+        <p class="latest-note">
+          公式リンク・マイリスト追加はイベントページをご覧ください
+        </p>
+
+        ${isFavorite ? `
+          <p class="fav-mark">♡ お気に入り</p>
+        ` : ""}
+
+        ${status ? `
+          <p class="status-mark">
+            ステータス：${status==="予定"?"購入予定":"購入済"}
           </p>
-
-          ${isFavorite ? `
-            <p class="fav-mark">
-              ♡ お気に入り
-            </p>
-          ` : ""}
-
-          ${status ? `
-            <p class="status-mark">
-              ステータス：${status==="予定"?"購入予定":"購入済"}
-            </p>
-          ` : ""}
-
-        </div>
+        ` : ""}
 
       </div>
       `;
@@ -2674,4 +2690,5 @@ loadTodayContent();
 
 </body>
 </html>
+
 
