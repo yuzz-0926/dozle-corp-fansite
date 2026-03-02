@@ -1968,12 +1968,12 @@ fetch(goodsURL)
 
     const data = parseCSV(text);
 
-    // 🔥 ステータスを自動判定して追加
+    // 🔥 ステータス自動判定
     data.forEach(item=>{
-      item.autoStatus = getGoodsStatus(item.start_datetime, item.end_datetime);
+      item.autoStatus = getGoodsSaleStatus(item.start_datetime, item.end_datetime);
     });
 
-    // 🔥 並び替え（販売中 → 販売前 → 販売終了）
+    // 🔥 並び替え
     const order = { "販売中":0, "販売前":1, "販売終了":2 };
     data.sort((a,b)=> order[a.autoStatus] - order[b.autoStatus]);
 
@@ -1982,7 +1982,6 @@ fetch(goodsURL)
     data.forEach(item => {
 
       const status = item.autoStatus;
-      const isActive = status === "販売中";
 
       html += `
       <div class="event-card-new">
@@ -1993,11 +1992,16 @@ fetch(goodsURL)
 
         <div class="event-info">
 
-          <h3 class="event-title">${item.title}</h3>
+          <h3 class="event-title">${item.series}</h3>
 
           <p class="event-meta">
-            <span class="material-symbols-outlined meta-icon">sell</span>
-            ${item.category || ""}
+            <span class="material-symbols-outlined meta-icon">schedule</span>
+            ${item.start_datetime || ""} 〜 ${item.end_datetime || ""}
+          </p>
+
+          <p class="event-meta">
+            <span class="material-symbols-outlined meta-icon">store</span>
+            ${item.site_name || ""}
           </p>
 
           <p class="event-meta">
@@ -2006,14 +2010,14 @@ fetch(goodsURL)
           </p>
 
           <div class="event-links">
-            ${item.buy_link ? `
-              <a href="${item.buy_link}" target="_blank" class="event-link-btn">
+            ${item.link1 ? `
+              <a href="${item.link1}" target="_blank" class="event-link-btn">
                 ご購入はこちら
               </a>
             ` : ""}
 
-            ${item.detail_link ? `
-              <a href="${item.detail_link}" target="_blank" class="event-link-btn gray">
+            ${item.link2 ? `
+              <a href="${item.link2}" target="_blank" class="event-link-btn gray">
                 商品説明ページ
               </a>
             ` : ""}
@@ -2021,18 +2025,18 @@ fetch(goodsURL)
 
           <div class="event-actions">
 
-            <button class="fav-btn ${isGoodsFav(item.title) ? 'active' : ''}"
-              onclick="toggleGoodsFavorite('${item.title}')">
+            <button class="fav-btn ${isGoodsFav(item.series) ? 'active' : ''}"
+              onclick="toggleGoodsFavorite('${item.series}')">
               ♡ お気に入り
             </button>
 
             <select class="event-status"
-              onchange="saveGoodsStatus('${item.title}', this.value)">
+              onchange="saveGoodsStatus('${item.series}', this.value)">
               <option value="">選択しない</option>
-              <option value="予定" ${getGoodsStatus(item.title)==="予定"?"selected":""}>
+              <option value="予定" ${getGoodsStatus(item.series)==="予定"?"selected":""}>
                 購入予定
               </option>
-              <option value="済" ${getGoodsStatus(item.title)==="済"?"selected":""}>
+              <option value="済" ${getGoodsStatus(item.series)==="済"?"selected":""}>
                 購入済
               </option>
             </select>
@@ -2648,6 +2652,18 @@ function switchMyListType(type){
 
   loadMyList("all");
 }
+
+function getGoodsSaleStatus(start, end){
+
+  const now = new Date();
+
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  if(now < startDate) return "販売前";
+  if(now > endDate) return "販売終了";
+  return "販売中";
+}
   
 loadNews();
 loadTodayContent();
@@ -2658,3 +2674,4 @@ loadTodayContent();
 
 </body>
 </html>
+
