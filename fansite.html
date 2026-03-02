@@ -650,34 +650,6 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   margin-bottom:20px;
   flex-wrap:nowrap;
 }
-
-.filter-btn{
-  padding:8px 18px;
-  border:1px solid #000;
-  border-radius:20px;
-  background:#fff;
-  color:#000;
-  cursor:pointer;
-  white-space:nowrap;
-  transform:none !important;
-  transition:0.2s ease;
-}
-
-.filter-btn:active{
-  transform:none !important;
-}
-
-.filter-btn:hover{
-  background:#000;
-  color:#fff;
-  opacity:0.8;
-}
-
-.filter-btn.active{
-  background:#000;
-  color:#fff;
-  font-weight:bold;
-}
   
 .fav-btn{
   padding:8px 12px;
@@ -1168,18 +1140,6 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   margin-bottom:20px;
   flex-wrap:wrap;
 }
-
-.filter-row .filter-btn{
-  padding:6px 12px;
-  font-size:13px;
-  border:1px solid #000;
-  background:#fff;
-}
-
-.filter-row .filter-btn.active{
-  background:#000;
-  color:#fff;
-}
   
 .sale-now { color:#00a000; font-weight:bold; }
 .sale-before { color:#0066cc; }
@@ -1247,6 +1207,37 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 .status-badge{
   background:#222;
   color:#fff;
+}
+
+/* ===== フィルター 最終版 ===== */
+
+.filter-btn{
+  padding:8px 18px;
+  border:1px solid #000;
+  border-radius:20px;
+  background:#fff;
+  color:#000;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all 0.2s ease;
+}
+
+.filter-row .filter-btn{
+  padding:6px 12px;
+  font-size:13px;
+}
+
+/* ホバー（強め指定） */
+.filter-row .filter-btn:hover{
+  background:#000;
+  color:#fff;
+}
+
+/* アクティブ */
+.filter-row .filter-btn.active{
+  background:#000;
+  color:#fff;
+  font-weight:bold;
 }
   
 </style>
@@ -2764,6 +2755,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
