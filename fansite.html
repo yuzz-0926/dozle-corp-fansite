@@ -1663,20 +1663,35 @@ function getGoodsStatus(start, end){
   return "販売終了";
 }
 
-function formatGoodsDate(dateStr){
+function formatGoodsDateTime(startStr, endStr){
 
-  const date = new Date(dateStr);
+  if(!startStr) return "";
 
-  const y = date.getFullYear();
-  const m = date.getMonth() + 1;
-  const d = date.getDate();
-  const h = String(date.getHours()).padStart(2,"0");
-  const min = String(date.getMinutes()).padStart(2,"0");
+  function formatOne(dateStr){
 
-  const days = ["日","月","火","水","木","金","土"];
-  const week = days[date.getDay()];
+    const date = new Date(dateStr);
+    if(isNaN(date)) return dateStr; // 不正データ対策
 
-  return `${y}年${m}月${d}日(${week})${h}:${min}`;
+    const y = date.getFullYear();
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    const day = ["日","月","火","水","木","金","土"][date.getDay()];
+
+    const hh = String(date.getHours()).padStart(2,"0");
+    const mm = String(date.getMinutes()).padStart(2,"0");
+
+    return `${y}年${m}月${d}日(${day})${hh}:${mm}`;
+  }
+
+  const startText = formatOne(startStr);
+
+  if(!endStr || endStr.trim()===""){
+    return `${startText}～`;
+  }
+
+  const endText = formatOne(endStr);
+
+  return `${startText}～${endText}`;
 }
   
 function loadTodayContent(){
@@ -2047,7 +2062,7 @@ fetch(goodsURL)
 
           <p class="event-meta">
             <span class="material-symbols-outlined meta-icon">schedule</span>
-            ${item.start_datetime || ""} 〜 ${item.end_datetime || ""}
+            ${formatGoodsDateTime(item.start_datetime, item.end_datetime)}
           </p>
 
           <p class="event-meta">
@@ -2412,7 +2427,7 @@ function loadEventMyList(filter="all"){
       html || "<p>該当イベントなし</p>";
 
     document.getElementById("mylist-count").innerText=
-      `これまで参加したイベント：${countParticipated}件`;
+      `これまでに参加したイベント：${countParticipated}件`;
 
   });
 }
@@ -2476,7 +2491,7 @@ function loadGoodsMyList(filter="all"){
 
           <p class="meta-row">
             <span class="material-symbols-outlined meta-icon">schedule</span>
-            ${item.start_datetime || ""} 〜 ${item.end_datetime || ""}
+            ${formatGoodsDateTime(item.start_datetime, item.end_datetime)}
           </p>
 
           <p class="meta-row">
@@ -2526,7 +2541,7 @@ function loadGoodsMyList(filter="all"){
       html || "<p>該当グッズなし</p>";
 
     document.getElementById("mylist-count").innerText =
-      `購入済グッズ：${countPurchased}件`;
+      `これまでに購入したグッズシリーズ：${countPurchased}件`;
 
   });
 }
@@ -2768,6 +2783,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
