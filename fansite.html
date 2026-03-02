@@ -1390,12 +1390,23 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
   </div>
 
   <div class="filter-row">
-    <button class="filter-btn" data-filter="all">すべて</button>
-    <button class="filter-btn" data-filter="fav">お気に入り</button>
-    <button class="filter-btn" data-filter="予定">
+    <button class="filter-btn active"
+      onclick="filterMyList('all', this)">
+      すべて
+    </button>
+
+    <button class="filter-btn"
+      onclick="filterMyList('fav', this)">
+      お気に入り
+    </button>
+
+    <button class="filter-btn"
+      onclick="filterMyList('予定', this)">
       <span id="filter-plan-label">参加予定</span>
     </button>
-    <button class="filter-btn" data-filter="済">
+
+    <button class="filter-btn"
+      onclick="filterMyList('済', this)">
       <span id="filter-done-label">参加済</span>
     </button>
   </div>
@@ -2533,13 +2544,13 @@ function loadGoodsMyList(filter="all"){
   });
 }
   
-function filterMyList(type){
+function filterMyList(type, el){
 
   document.querySelectorAll(".filter-btn")
     .forEach(btn=>btn.classList.remove("active"));
-  
-  event.target.classList.add("active");
-  
+
+  el.classList.add("active");
+
   loadMyList(type);
 }
 
@@ -2770,6 +2781,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
