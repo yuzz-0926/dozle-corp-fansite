@@ -1389,11 +1389,11 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
     </button>
   </div>
 
-  <div class="filter-wrapper">
-    <button class="filter-btn active" onclick="filterMyList('all')">すべて</button>
-    <button class="filter-btn" onclick="filterMyList('fav')">お気に入り</button>
-    <button class="filter-btn" onclick="filterMyList('予定')">参加予定</button>
-    <button class="filter-btn" onclick="filterMyList('済')">参加済</button>
+  <div class="filter-row">
+    <button class="filter-btn" data-filter="all">すべて</button>
+    <button class="filter-btn" data-filter="fav">お気に入り</button>
+    <button class="filter-btn" data-filter="予定" id="filter-plan">参加予定</button>
+    <button class="filter-btn" data-filter="済" id="filter-done">参加済</button>
   </div>
 
   <p id="mylist-count"></p>
@@ -2730,6 +2730,18 @@ function switchMyListType(type){
   document.getElementById("tab-"+type)
     .classList.add("active-type");
 
+  /* 🔥 フィルター名を変更 */
+  const planBtn = document.getElementById("filter-plan");
+  const doneBtn = document.getElementById("filter-done");
+
+  if(type==="event"){
+    planBtn.textContent = "参加予定";
+    doneBtn.textContent = "参加済";
+  }else{
+    planBtn.textContent = "購入予定";
+    doneBtn.textContent = "購入済";
+  }
+
   loadMyList("all");
 }
 
@@ -2754,6 +2766,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
