@@ -1239,6 +1239,37 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
     max-width:300px;
   }
 }
+
+/* マイステータスエリア */
+.my-status-box{
+  margin-top:14px;
+  padding:12px;
+  background:#f4f4f4;
+  border-radius:8px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* バッジ共通 */
+.my-badge{
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:600;
+}
+
+/* お気に入り */
+.fav-badge{
+  background:#000;
+  color:#fff;
+}
+
+/* ステータス */
+.status-badge{
+  background:#e60000;
+  color:#fff;
+}
   
 </style>
 </head>
@@ -2354,12 +2385,22 @@ function loadEventMyList(filter="all"){
                 公式リンク・マイリスト追加はイベントページをご覧ください
               </p>
 
-              ${isFavorite ? `
-                <p class="mylist-fav">♡ お気に入り</p>
-              ` : ""}
+              ${(isFavorite || status) ? `
+                <div class="my-status-box">
 
-              ${status ? `
-                <p class="mylist-status">ステータス：${status}</p>
+                  ${isFavorite ? `
+                    <span class="my-badge fav-badge">
+                      ♡ お気に入り
+                    </span>
+                  ` : ""}
+
+                  ${status ? `
+                    <span class="my-badge status-badge">
+                      ${status==="予定"?"参加予定":"参加済"}
+                    </span>
+                  ` : ""}
+
+                </div>
               ` : ""}
 
             </div>
@@ -2460,12 +2501,22 @@ function loadGoodsMyList(filter="all"){
             公式リンク・マイリスト追加はイベントページをご覧ください
           </p>
 
-          ${isFavorite ? `<p class="fav-mark">♡ お気に入り</p>` : ""}
+          ${(isFavorite || status) ? `
+            <div class="my-status-box">
 
-          ${status ? `
-            <p class="status-mark">
-              ステータス：${status==="予定"?"購入予定":"購入済"}
-            </p>
+              ${isFavorite ? `
+                <span class="my-badge fav-badge">
+                  ♡ お気に入り
+                </span>
+              ` : ""}
+
+              ${status ? `
+                <span class="my-badge status-badge">
+                  ${status==="予定"?"購入予定":"購入済"}
+                </span>
+              ` : ""}
+
+            </div>
           ` : ""}
 
         </div>
@@ -2708,6 +2759,7 @@ loadTodayContent();
 
 </body>
 </html>
+
 
 
 
